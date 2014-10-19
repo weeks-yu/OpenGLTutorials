@@ -181,3 +181,10 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+OpenGLBasic/basic3d/GeneratedFiles/qrc_openglbasic3dwin.cpp
+OpenGLBasic/basic3d/GeneratedFiles/ui_openglbasic3dwin.h
+OpenGLBasic/GLv1/GeneratedFiles/qrc_glv1win.cpp
+OpenGLBasic/GLv1/GeneratedFiles/ui_glv1win.h
+
+# Qt
+GeneratedFiles
