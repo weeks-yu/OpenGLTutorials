@@ -104,14 +104,14 @@
     <ClCompile Include="meshwidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="meshshaderwidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_meshshaderwidget.cpp">
+    <ClCompile Include="GeneratedFiles\Debug\moc_shaderwidget.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_meshshaderwidget.cpp">
+    <ClCompile Include="GeneratedFiles\Release\moc_shaderwidget.cpp">
       <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="shaderwidget.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -142,7 +142,7 @@
     <CustomBuild Include="meshwidget.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="meshshaderwidget.h">
+    <CustomBuild Include="shaderwidget.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

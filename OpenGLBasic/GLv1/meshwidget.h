@@ -16,6 +16,7 @@ protected:
 	virtual void initializeGL() override;
 	virtual void paintGL() override;
 	virtual void resizeGL(int w, int h) override;
+	
 
 	// mouse event handlers
 	virtual void mousePressEvent(QMouseEvent * e) override;
@@ -30,15 +31,19 @@ private:
 	QMatrix4x4 _modelMatrix;
 	
 	// mesh data
-	QVector<QVector3D> _vertPositions;
-	QVector<QVector3D> _vertNormals;
-	QVector<int32_t> _triangleIndices;
+	struct Vertex
+	{
+		QVector3D position;
+		QVector3D normal;
+	};
+	QVector<Vertex> _vertices;
+	QVector<quint32> _triangleIndices;
 
-	GLuint _vertPositionsBuffer;
-	GLuint _vertNormalsBuffer;
+	GLuint _vertBuffer;
 	GLuint _triangleIndicesBuffer;
 
-
+	GLuint _program;
+	GLuint _modelMatrixLocation, _viewMatrixLocation, _projectionMatrixLocation;
 private:
 	QPointF _lastMousePos;
 };

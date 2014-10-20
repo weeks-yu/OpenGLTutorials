@@ -3,7 +3,7 @@
 
 #include "meshwidget.h"
 
-static const bool UseShaders = false;
+static const bool UseShaders = true;
 
 MeshWidget::MeshWidget(QWidget *parent)
 	: QGLWidget(parent), QGLFunctions()
@@ -16,26 +16,22 @@ MeshWidget::MeshWidget(QWidget *parent)
 	// load mesh
 	loadMesh(tr("../data/dragon-10000.smf"));
 
-
 	// initialize model matrix data
 	_modelMatrix.setToIdentity();
 	_modelMatrix.scale(1.5);
 	_modelMatrix.rotate(45, 1, 1, 1);
 
-	_vertPositionsBuffer = 0;
-	_vertNormalsBuffer = 0;
+	_vertBuffer = 0;
 	_triangleIndicesBuffer = 0;
+
+	_program = -1;
+	_modelMatrixLocation = -1;
+	_viewMatrixLocation = -1;
+	_projectionMatrixLocation = -1;
 }
 
 MeshWidget::~MeshWidget()
-{
-	if(UseShaders)
-	{
-		glDeleteBuffers(1, &_vertPositionsBuffer);
-		glDeleteBuffers(1, &_vertNormalsBuffer);
-		glDeleteBuffers(1, &_triangleIndicesBuffer);
-	}
-}
+{}
 
 void MeshWidget::initializeGL()
 {
@@ -44,35 +40,127 @@ void MeshWidget::initializeGL()
 
 	if(UseShaders)
 	{
+		// create program
+		_program = glCreateProgram();
+
+		// create vertex shader
+		int vshader = glCreateShader(GL_VERTEX_SHADER);
+		const char * vshaderSource = 
+			"#version 120\n"
+			"attribute lowp vec3 position;\n"
+			"attribute lowp vec3 normal;\n"
+			"uniform lowp mat4 viewMatrix;\n"
+			"uniform lowp mat4 modelMatrix;\n"
+			"uniform lowp mat4 projectionMatrix;\n"
+			"varying vec4 pixelColor;\n"
+			"void main(void)\n"
+			"{\n"
+			"    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);\n"
+			"    pixelColor = vec4(normal, 1.0);\n"
+			"}\n";
+		// set shader source and compile
+		glShaderSource(vshader, 1, &vshaderSource, 0);
+		glCompileShader(vshader);		
+		{ // check status
+			GLint logLength;
+			glGetShaderiv(vshader, GL_INFO_LOG_LENGTH, &logLength);
+			if (logLength > 0) {
+				GLchar *log = (GLchar *)malloc(logLength);
+				glGetShaderInfoLog(vshader, logLength, &logLength, log);
+				qDebug("Shader compile log:\n%s", log);
+				free(log);
+			}
+			GLint status;
+			glGetShaderiv(vshader, GL_COMPILE_STATUS, &status);
+			if (status == 0) {
+				glDeleteShader(vshader);
+				return;
+			}
+		}
+
+		// create fragment shader
+		int fshader = glCreateShader(GL_FRAGMENT_SHADER);
+		const char * fshaderSource = 
+			"#version 120\n"
+			"varying lowp vec4 pixelColor;\n"
+			"void main(void)\n"
+			"{\n"
+			"    gl_FragColor = pixelColor;\n"
+			"}\n";
+		// set shader source and compile
+		glShaderSource(fshader, 1, &fshaderSource, 0);
+		glCompileShader(fshader);
+		{ // check status
+			GLint logLength;
+			glGetShaderiv(fshader, GL_INFO_LOG_LENGTH, &logLength);
+			if (logLength > 0) {
+				GLchar *log = (GLchar *)malloc(logLength);
+				glGetShaderInfoLog(fshader, logLength, &logLength, log);
+				qDebug("Shader compile log:\n%s", log);
+				free(log);
+			}
+			GLint status;
+			glGetShaderiv(fshader, GL_COMPILE_STATUS, &status);
+			if (status == 0) {
+				glDeleteShader(fshader);
+				return;
+			}
+		}
+
+		// attach shaders to program and link program
+		glAttachShader(_program, vshader);
+		glAttachShader(_program, fshader);
+		glLinkProgram(_program);
+		{ // check status
+			GLint logLength, status;
+			glValidateProgram(_program);
+			glGetProgramiv(_program, GL_INFO_LOG_LENGTH, &logLength);
+			if (logLength > 0) {
+				GLchar *log = (GLchar *)malloc(logLength);
+				glGetProgramInfoLog(_program, logLength, &logLength, log);
+				qDebug("Program validate log:\n%s", log);
+				free(log);
+			}
+
+			glGetProgramiv(_program, GL_VALIDATE_STATUS, &status);
+			if (status == 0) {
+				return;
+			}
+		}
+		
+		// get location of uniform values
+		_modelMatrixLocation = glGetUniformLocation(_program, "modelMatrix");
+		_viewMatrixLocation = glGetUniformLocation(_program, "viewMatrix");
+		_projectionMatrixLocation = glGetUniformLocation(_program, "projectionMatrix");
+
+		Q_ASSERT(_modelMatrixLocation != -1 && _viewMatrixLocation != -1 && _projectionMatrixLocation != -1);
+
+		// bind 0 to position
+		glBindAttribLocation(_program, 0, "position");
+		// bind 1 to normal
+		glBindAttribLocation(_program, 1, "normal");
+		{
+			GLenum e = glGetError();
+			Q_ASSERT(e == GL_NO_ERROR);
+		}
+
+
 		// generate buffers
-		glGenBuffers(1, &_vertPositionsBuffer);
-		glGenBuffers(1, &_vertNormalsBuffer);
+		glGenBuffers(1, &_vertBuffer);
 		glGenBuffers(1, &_triangleIndicesBuffer);
 
 		// fill buffers with data
-		glBindBuffer(GL_ARRAY_BUFFER, _vertPositionsBuffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(_vertPositions.first()) * _vertPositions.size(), 
-			_vertPositions.data(), GL_STATIC_DRAW);
-
-		glBindBuffer(GL_ARRAY_BUFFER, _vertNormalsBuffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(_vertNormals.first()) * _vertNormals.size(),
-			_vertNormals.data(), GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, _vertBuffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(_vertices.first()) * _vertices.size(), 
+			_vertices.data(), GL_STATIC_DRAW);
 	
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _triangleIndicesBuffer);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(_triangleIndices.first()) * _triangleIndices.size(),
 			_triangleIndices.data(), GL_STATIC_DRAW);	
-
-		// set vertex attrib pointer to these buffer
-		glBindBuffer(GL_ARRAY_BUFFER, _vertPositionsBuffer);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(_vertPositions.first()), 0);
-
-		glBindBuffer(GL_ARRAY_BUFFER, _vertNormalsBuffer);
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(_vertNormals.first()), 0);
+		
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
-
-	resizeGL(width(), height());
 }
 
 void MeshWidget::paintGL()
@@ -91,28 +179,45 @@ void MeshWidget::paintGL()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glShadeModel(GL_SMOOTH);
 
-	static GLfloat mat_diffuse[] = {1, 1, 1, 1};
-	static GLfloat mat_ambient[] = {1, 0, 0, 1};
-	static GLfloat mat_specular[] = {1, 1, 1, 1};
-	static GLfloat mat_shininess = 5;
-	static GLfloat lightPosition[4] = { 1e5, 1e5, 1e5, 1.0 };
-
 	if(UseShaders)
-	{
+	{		
+		glUseProgram(_program);
 
+		// set model matrix
+		glUniformMatrix4fv(_modelMatrixLocation, 1, GL_FALSE, _modelMatrix.data());
+		
+		// set view matrix
+		QMatrix4x4 viewMatrix;
+		viewMatrix.setToIdentity();
+		viewMatrix.lookAt(QVector3D(0, 0, -1000), QVector3D(0, 0, 0), QVector3D(0, -1, 0));
+		glUniformMatrix4fv(_viewMatrixLocation, 1, GL_FALSE, viewMatrix.data());
+
+		// set projection matrix
+		QMatrix4x4 projectionMatrix;
+		projectionMatrix.setToIdentity();
+		projectionMatrix.perspective(30, (double)width()/height(), 0.01, 1e5);
+		glUniformMatrix4fv(_projectionMatrixLocation, 1, GL_FALSE, projectionMatrix.data());
+
+		// set vertex attrib pointer to these buffer
+		glBindBuffer(GL_ARRAY_BUFFER, _vertBuffer);
+		glEnableVertexAttribArray(0); // 0 is already bound to position
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(_vertices.first()), 0);
+		glEnableVertexAttribArray(1); // 1 is already bound to normal
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(_vertices.first()), (void*)(3 * sizeof(float)));
+
+		// draw mesh
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _triangleIndicesBuffer);
+		glDrawElements(GL_TRIANGLES, _triangleIndices.size(), GL_UNSIGNED_INT, 0);
+
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 	else
 	{
-		glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
-		glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-		glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-		glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess);
-
-		glEnable(GL_LIGHTING);
-		glEnable(GL_LIGHT0);
-		// set light position
-		glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		//////////////////////////////////////////////////////////////////////////
@@ -133,8 +238,8 @@ void MeshWidget::paintGL()
 		glBegin(GL_TRIANGLES);
 		for(int vid : _triangleIndices)
 		{
-			glNormal3fv(&(_vertNormals[vid][0]));
-			glVertex3fv(&(_vertPositions[vid][0]));
+			glColor3fv(&(_vertices[vid].normal[0]));
+			glVertex3fv(&(_vertices[vid].position[0]));
 		}
 		glEnd();	
 	}
@@ -183,8 +288,7 @@ void MeshWidget::wheelEvent( QWheelEvent * e )
 
 void MeshWidget::loadMesh( const QString & f )
 {
-	_vertPositions.clear();
-	_vertNormals.clear();
+	_vertices.clear();
 	_triangleIndices.clear();
 	QFile file(f);
 	if(file.open(QFile::ReadOnly))
@@ -199,26 +303,27 @@ void MeshWidget::loadMesh( const QString & f )
 			{
 				double x, y, z;
 				ts >> x >> y >> z;
-				_vertPositions << QVector3D(x, y, z);
-				_vertNormals << QVector3D(0, 0, 0);
+				Vertex v = {QVector3D(x, y, z), QVector3D(0, 0, 0)};
+				_vertices << v;
 			}else if (token == "f")
 			{
 				int a, b, c;
 				ts >> a >> b >> c;
 				_triangleIndices << (a-1) << (b-1) << (c-1);
-				QVector3D normal = QVector3D::crossProduct(_vertPositions[a-1] - _vertPositions[b-1], 
-					_vertPositions[c-1] - _vertPositions[b-1]).normalized();
-				_vertNormals[a-1] += normal;
-				_vertNormals[b-1] += normal;
-				_vertNormals[c-1] += normal;
+				QVector3D normal = QVector3D::crossProduct(
+					_vertices[a-1].position - _vertices[b-1].position, 
+					_vertices[c-1].position - _vertices[b-1].position).normalized();
+				_vertices[a-1].normal += normal;
+				_vertices[b-1].normal += normal;
+				_vertices[c-1].normal += normal;
 			}else
 			{
 				break;
 			}
 		}
-		for(auto & n : _vertNormals)
+		for(auto & v : _vertices)
 		{
-			n = -n.normalized();
+			v.normal = -v.normal.normalized();
 		}
 	}
 }
