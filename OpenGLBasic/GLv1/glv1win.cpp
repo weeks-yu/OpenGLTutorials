@@ -6,6 +6,7 @@
 #include "camerawidget.h"
 #include "meshwidget.h"
 #include "texturewidget.h"
+#include "shaderwidget.h"
 
 #include "glv1win.h"
 
@@ -24,6 +25,7 @@ GLv1Win::GLv1Win(QWidget *parent)
 	_mdiArea = new QMdiArea(this);
 	setCentralWidget(_mdiArea);
 
+	_mdiArea->addSubWindow(new ShaderWidget);
 	_mdiArea->addSubWindow(new TextureWidget);
 	_mdiArea->addSubWindow(new CameraWidget);
 	_mdiArea->addSubWindow(new MeshWidget);
