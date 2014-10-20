@@ -24,12 +24,12 @@
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
     <Filter Include="Generated Files\Debug">
-      <UniqueIdentifier>{9481f410-06b1-4059-af98-fe1c75d8b349}</UniqueIdentifier>
+      <UniqueIdentifier>{e9d6109c-3a43-4fb7-9821-80021d31e705}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
     <Filter Include="Generated Files\Release">
-      <UniqueIdentifier>{c067dff4-29cc-4c5c-b829-651c1bc393b8}</UniqueIdentifier>
+      <UniqueIdentifier>{38536acf-a28e-43b0-9165-5380c94dc631}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
@@ -38,33 +38,25 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="openglbasic3dwin.cpp">
+    <ClCompile Include="basicwidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_openglbasic3dwin.cpp">
+    <ClCompile Include="GeneratedFiles\Debug\moc_basicwidget.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_openglbasic3dwin.cpp">
+    <ClCompile Include="GeneratedFiles\Release\moc_basicwidget.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\qrc_openglbasic3dwin.cpp">
+    <ClCompile Include="GeneratedFiles\qrc_basicwidget.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="openglbasic3dwin.h">
+    <CustomBuild Include="basicwidget.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="openglbasic3dwin.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="openglbasic3dwin.qrc">
+    <CustomBuild Include="basicwidget.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="GeneratedFiles\ui_openglbasic3dwin.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

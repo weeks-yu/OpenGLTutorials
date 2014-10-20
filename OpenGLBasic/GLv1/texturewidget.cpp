@@ -5,8 +5,8 @@ static const int M = 128, N = 256;
 TextureWidget::TextureWidget(QWidget *parent)
 	: QGLWidget(parent)
 {
-	setWindowTitle(tr("Texture Widget"));
-	setMinimumSize(500, 500);
+	setWindowTitle(tr("5. Texture and Light"));
+	setMinimumSize(200, 200);
 	setMouseTracking(true);
 
 	// initialize model matrix data
@@ -58,9 +58,9 @@ void TextureWidget::paintGL()
 	glBindTexture(GL_TEXTURE_2D, _textureId);
 
 
-	static GLfloat mat_diffuse[] = {110.5f, 110.5f, 110.8f, 110.5f};
-	static GLfloat mat_ambient[] = {0.f, .8f, .5f, .5f};
-	static GLfloat mat_specular[] = {110.5f,110.8f, 110.8f, 110.5f};
+	static GLfloat mat_diffuse[] = {100, 100, 100, 100};
+	static GLfloat mat_ambient[] = {0.f, .5f, .5f, .5f};
+	static GLfloat mat_specular[] = {100, 100, 100, 100};
 	static GLfloat mat_shininess = 100.0f;
 
 	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
@@ -70,16 +70,13 @@ void TextureWidget::paintGL()
 
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-	//glEnable(GL_LIGHT1);
 
 	// setup projection matrix
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(_projectionMatrix.data());
 
-	static GLfloat lightPosition[4] = { 6000.5, 10000.0, 14000.0, 0.0 };
-	//static GLfloat lightPosition1[4] = {1000, -2000, -3000, 1};
+	static GLfloat lightPosition[4] = { 1, 1, 1, 0.0 };
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-	//glLightfv(GL_LIGHT1, GL_POSITION, lightPosition1);
 
 	// setup model matrix (ignore the "view matrix" since it is identity here)
 	glMatrixMode(GL_MODELVIEW);
@@ -167,11 +164,11 @@ void TextureWidget::buildModel()
 			float yratio = 1.0f / (M - 1) * i;
 			float xangle = M_PI * 2 * xratio;
 			float yangle = M_PI * yratio - M_PI_2;
-			QVector4D pos(cos(xangle)*cos(yangle), sin(xangle)*cos(yangle), sin(yangle), 1);
+			QVector4D pos(cos(xangle)*cos(yangle), sin(yangle), sin(xangle)*cos(yangle),  1);
 			_vertexPositions << pos;
-			QVector3D normal(cos(xangle)*cos(yangle), sin(xangle)*cos(yangle), sin(yangle));
+			QVector3D normal(cos(xangle)*cos(yangle), sin(yangle), sin(xangle)*cos(yangle));
 			_normals << normal;
-			QVector2D texCoord(xratio, yratio);
+			QVector2D texCoord(1.0 - xratio, yratio);
 			_texCoords << texCoord;
 			_vertIds[i][j] = _texCoords.size() - 1;
 		}

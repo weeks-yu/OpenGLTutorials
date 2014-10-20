@@ -5,9 +5,10 @@
 TransformWidget::TransformWidget(QWidget *parent)
 	: QGLWidget(parent)
 {
-	setWindowTitle(tr("Transform Widget"));
-	setMinimumSize(500, 500);
+	setWindowTitle(tr("3. Model Transform"));
+	setMinimumSize(200, 200);
 	setMouseTracking(true);
+	setFocusPolicy(Qt::ClickFocus);
 
 	// initialize model matrix data
 	_modelMatrix.setToIdentity();
@@ -15,8 +16,8 @@ TransformWidget::TransformWidget(QWidget *parent)
 	_modelMatrix.rotate(45, 1, 1, 1);
 
 	// initialize projection matrix data
-	_projectionMatrix.setToIdentity();
-	_projectionMatrix.ortho(-width()/2.0, width()/2.0, -height()/2.0, height()/2.0, -1e3, 1e3);
+	_usePerspectiveProjection = false;
+	updateProjectionMatrix();
 }
 
 TransformWidget::~TransformWidget()
@@ -111,8 +112,7 @@ void TransformWidget::paintGL()
 void TransformWidget::resizeGL( int w, int h )
 {
 	glViewport(0, 0, w, h);
-	_projectionMatrix.setToIdentity();
-	_projectionMatrix.ortho(-width()/2.0, width()/2.0, -height()/2.0, height()/2.0, -1e3, 1e3);
+	updateProjectionMatrix();
 }
 
 void TransformWidget::mousePressEvent( QMouseEvent * e )
@@ -145,4 +145,28 @@ void TransformWidget::wheelEvent( QWheelEvent * e )
 {
 	_modelMatrix.scale(exp(e->delta() / 1000.0));
 	update();
+}
+
+void TransformWidget::updateProjectionMatrix()
+{
+	if(!_usePerspectiveProjection)
+	{
+		_projectionMatrix.setToIdentity();
+		_projectionMatrix.ortho(-width()/2.0, width()/2.0, -height()/2.0, height()/2.0, -1e3, 1e3);
+	}
+	else
+	{
+		_projectionMatrix.setToIdentity();
+		_projectionMatrix.perspective(20.0f, double(height()) / width(), 0.01, 1e4);
+	}
+	update();
+}
+
+void TransformWidget::keyPressEvent( QKeyEvent * e )
+{
+	if(e->key() == Qt::Key_C)
+	{
+		_usePerspectiveProjection = !_usePerspectiveProjection;
+		updateProjectionMatrix();
+	}
 }

@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/GLv1Win">
         <file>Resources/earthmap.jpg</file>
+        <file>Resources/icon.png</file>
     </qresource>
 </RCC>

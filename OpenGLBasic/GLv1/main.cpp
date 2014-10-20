@@ -1,5 +1,6 @@
 #include "glv1win.h"
-#include <QtWidgets/QApplication>
+#include <QtCore>
+#include <QtWidgets>
 
 int main(int argc, char *argv[])
 {

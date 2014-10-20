@@ -50,6 +50,11 @@ public:
 	inline QVector3D leftward() const { return QVector3D::crossProduct(_up, _center - _eye).normalized(); }
 	inline QVector3D rightward() const { return -leftward(); }
 
+	// travel
+	void rectifyUp(bool updateMat = true); // rectify the up vector
+	void translate(const QVector3D & t, bool updateMat = true);
+	void turnDirection(double rightAngle, double upAngle, bool updateMat = true);
+
 private:
 	void updateMatrices();
 

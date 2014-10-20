@@ -1,3 +1,5 @@
+#include <glut.h>
+
 #include "camerawidget.h"
 
 
@@ -108,6 +110,37 @@ void PerspectiveCamera::setNearAndFarPlanes(double n, double f, bool updateMat)
 }
 
 
+void PerspectiveCamera::rectifyUp( bool updateMat /*= true*/ )
+{
+	auto left = QVector3D::crossProduct(_up, _center - _eye);
+	auto realUp = QVector3D::crossProduct(_center - _eye, left).normalized();
+	_up = realUp;
+	if(updateMat)
+		updateMatrices();
+}
+
+void PerspectiveCamera::translate( const QVector3D & t, bool updateMat )
+{
+	if(t.isNull())
+		return;
+	_eye += t;
+	_center += t;
+	if(updateMat)
+		updateMatrices();
+}
+
+void PerspectiveCamera::turnDirection( double rightAngle, double upAngle, bool updateMat )
+{
+	if(rightAngle == 0 && upAngle == 0)
+		return;
+	rectifyUp(false);
+	auto newDir = (forward() + tan(rightAngle) * rightward() + tan(upAngle) * upward()).normalized();
+	_center = _eye + newDir * (_center - _eye).length();
+	rectifyUp(updateMat);
+}
+
+
+
 
 template <class T>
 inline T BoundBetween(const T & v, const T & low, const T & high)
@@ -122,15 +155,13 @@ inline T BoundBetween(const T & v, const T & low, const T & high)
 CameraWidget::CameraWidget(QWidget *parent)
 	: QGLWidget(parent)
 {
-	setWindowTitle(tr("Camera Widget"));
-	setMinimumSize(500, 500);
+	setWindowTitle(tr("4. Camera Travel"));
+	setMinimumSize(200, 200);
 	setMouseTracking(true);
 	setFocusPolicy(Qt::ClickFocus);
 
 	// initialize model matrix data
 	_modelMatrix.setToIdentity();
-	_modelMatrix.translate(0, 0, -1);
-	_modelMatrix.rotate(45, 1, 1, 1);
 
 	// set camera
 	_camera.setEye(QVector3D(0, 0, -5), false);
@@ -163,7 +194,7 @@ void CameraWidget::paintGL()
 	painter.begin(this);
 
 	painter.beginNativePainting();
-	qglClearColor(Qt::black);
+	qglClearColor(Qt::white);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glEnable(GL_MULTISAMPLE);
@@ -183,19 +214,19 @@ void CameraWidget::paintGL()
 	glLoadMatrixf(_camera.viewMatrix().data());
 
 	// paint axis 
-	glLineWidth(2.0);
+	glLineWidth(10.0);
 	glBegin(GL_LINES);
 	qglColor(Qt::red);
 	glVertex3d(0, 0, 0);
-	glVertex3d(1, 0, 0);
+	glVertex3d(1e5, 0, 0);
 	qglColor(Qt::green);
 	glVertex3d(0, 0, 0);
-	glVertex3d(0, 1, 0);
+	glVertex3d(0, 1e5, 0);
 	qglColor(Qt::blue);
 	glVertex3d(0, 0, 0);
-	glVertex3d(0, 0, 1);
+	glVertex3d(0, 0, 1e5);
 	glEnd();
-	glPointSize(5.0);
+	glPointSize(20.0);
 	glBegin(GL_POINTS);
 	qglColor(Qt::yellow);
 	glVertex3d(0, 0, 0);
@@ -207,49 +238,10 @@ void CameraWidget::paintGL()
 	glLoadIdentity();
 	glLoadMatrixf((_camera.viewMatrix() * _modelMatrix).data());
 
-	// draw a cube
-	static const double verts[8][4] = {
-		{ -1, -1, -1, 1 },
-		{ 1, -1, -1, 1 },
-		{ 1, 1, -1, 1 },
-		{ -1, 1, -1, 1 },
-		{ -1, -1, 1, 1 },
-		{ 1, -1, 1, 1 },
-		{ 1, 1, 1, 1 },
-		{ -1, 1, 1, 1 }
-	};
-
-	static const int quadFaces[6][4] = {
-		{ 0, 1, 5, 4 },
-		{ 4, 5, 6, 7 },
-		{ 1, 2, 6, 5 },
-		{ 0, 4, 7, 3 },
-		{ 2, 3, 7, 6 },
-		{ 1, 0, 3, 2 }
-	};
-
-	static const QColor faceColors[6] = {
-		Qt::red,
-		Qt::yellow,
-		Qt::green,
-		Qt::blue,
-		Qt::cyan,
-		Qt::magenta
-	};
-
-	glBegin(GL_TRIANGLES);
-	for (int i = 0; i < 6; i++) {
-		glColor4f(faceColors[i].redF(), faceColors[i].greenF(), faceColors[i].blueF(), 0.8f);
-
-		glVertex4dv(verts[quadFaces[i][0]]);
-		glVertex4dv(verts[quadFaces[i][1]]);
-		glVertex4dv(verts[quadFaces[i][2]]);
-
-		glVertex4dv(verts[quadFaces[i][0]]);
-		glVertex4dv(verts[quadFaces[i][2]]);
-		glVertex4dv(verts[quadFaces[i][3]]);
-	}
-	glEnd();
+	// draw a teapot
+	glLineWidth(1.0);
+	glColor3f(0, 0, 0);
+	glutWireTeapot(1.0);
 
 
 	// restore all native states
@@ -298,47 +290,42 @@ void CameraWidget::keyPressEvent( QKeyEvent * e )
 {
 	if(e->key() == Qt::Key_W) // move forward
 	{
-		auto trans = _camera.forward() * 0.1;
-		_camera.setEye(_camera.eye() + trans, false);
-		_camera.setCenter(_camera.center() + trans);
+		_camera.translate(_camera.forward() * 0.1);
 	}
-	else if(e->key() == Qt::Key_A) // left move
+	else if(e->key() == Qt::Key_A) // move left 
 	{
-		auto trans = _camera.leftward() * 0.1;
-		_camera.setEye(_camera.eye() + trans, false);
-		_camera.setCenter(_camera.center() + trans);
+		_camera.translate(_camera.leftward() * 0.1);
 	}
-	else if(e->key() == Qt::Key_D) // right move
+	else if(e->key() == Qt::Key_D) // move right
 	{
-		auto trans = _camera.rightward() * 0.1;
-		_camera.setEye(_camera.eye() + trans, false);
-		_camera.setCenter(_camera.center() + trans);
+		_camera.translate(_camera.rightward() * 0.1);
 	}
-	else if(e->key() == Qt::Key_S) // back move
+	else if(e->key() == Qt::Key_S) // move back
 	{
-		auto trans = _camera.backward() * 0.1;
-		_camera.setEye(_camera.eye() + trans, false);
-		_camera.setCenter(_camera.center() + trans);
+		_camera.translate(_camera.backward() * 0.1);
 	}
-	else if(e->key() == Qt::Key_Left)
+	else if(e->key() == Qt::Key_Left) // turn left
 	{
-		double d = (_camera.center() - _camera.eye()).length();
-		auto newCenter = (_camera.center() + _camera.leftward() * tan(0.05) * d).normalized() * d;
-		_camera.setCenter(newCenter);
+		_camera.turnDirection(-0.05, 0);
 	}
-	else if(e->key() == Qt::Key_Right)
+	else if(e->key() == Qt::Key_Right) // turn right
 	{
-		double d = (_camera.center() - _camera.eye()).length();
-		auto newCenter = (_camera.center() + _camera.rightward() * tan(0.05) * d).normalized() * d;
-		_camera.setCenter(newCenter);
+		_camera.turnDirection(+0.05, 0);
+	}
+	else if(e->key() == Qt::Key_Up) // turn up
+	{
+		_camera.turnDirection(0, +0.05);
+	}
+	else if(e->key() == Qt::Key_Down) // turn down
+	{
+		_camera.turnDirection(0, -0.05);
 	}
 	
+	// adjust the near/far clip planes to make the cube visible
 	double d = QVector3D::dotProduct((_modelMatrix * QVector4D(0, 0, 0, 1)).toVector3DAffine() - _camera.eye(), _camera.forward());
 	double n = BoundBetween(d - 100, 1e-3, 1e3);
 	double f = BoundBetween(d + 100, 1e-3, 1e3);
 	_camera.setNearAndFarPlanes(n, f);
-
-	qDebug() << "....";
 
 	update();
 }

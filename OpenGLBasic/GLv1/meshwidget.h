@@ -1,16 +1,15 @@
-#ifndef TRANSFORMWIDGET_H
-#define TRANSFORMWIDGET_H
+#ifndef MESHWIDGET_H
+#define MESHWIDGET_H
 
 #include <QtOpenGL>
 
-// illustrate the usage of 
-class TransformWidget : public QGLWidget
+class MeshWidget : public QGLWidget, public QGLFunctions
 {
 	Q_OBJECT
 
 public:
-	TransformWidget(QWidget *parent = nullptr);
-	~TransformWidget();
+	MeshWidget(QWidget *parent = nullptr);
+	~MeshWidget();
 
 protected:
 	// opengl methods
@@ -24,18 +23,24 @@ protected:
 	virtual void mouseReleaseEvent(QMouseEvent * e) override;
 	virtual void wheelEvent(QWheelEvent * e) override;
 
-	// key event handler
-	virtual void keyPressEvent(QKeyEvent * e) override;
+	// load mesh
+	void loadMesh(const QString & file);
 
 private:
-	void updateProjectionMatrix();
+	QMatrix4x4 _modelMatrix;
+	
+	// mesh data
+	QVector<QVector3D> _vertPositions;
+	QVector<QVector3D> _vertNormals;
+	QVector<int32_t> _triangleIndices;
 
-private:
-	QMatrix4x4 _modelMatrix, _projectionMatrix;
-	bool _usePerspectiveProjection;
+	GLuint _vertPositionsBuffer;
+	GLuint _vertNormalsBuffer;
+	GLuint _triangleIndicesBuffer;
+
 
 private:
 	QPointF _lastMousePos;
 };
 
-#endif // TRANSFORMWIDGET_H
+#endif // MESHWIDGET_H

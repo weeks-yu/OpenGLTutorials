@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>GLv1Win</string>
+   <string>OpenGL v1 demo</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="glv1win.qrc">
+    <normaloff>:/GLv1Win/Resources/icon.png</normaloff>:/GLv1Win/Resources/icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget"/>
   <widget class="QMenuBar" name="menuBar">
