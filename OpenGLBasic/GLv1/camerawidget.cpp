@@ -155,7 +155,7 @@ inline T BoundBetween(const T & v, const T & low, const T & high)
 CameraWidget::CameraWidget(QWidget *parent)
 	: QGLWidget(parent)
 {
-	setWindowTitle(tr("4. Camera Travel"));
+	setWindowTitle(tr("5. Camera Travel"));
 	setMinimumSize(200, 200);
 	setMouseTracking(true);
 	setFocusPolicy(Qt::ClickFocus);

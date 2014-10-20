@@ -24,12 +24,12 @@ GLv1Win::GLv1Win(QWidget *parent)
 	_mdiArea = new QMdiArea(this);
 	setCentralWidget(_mdiArea);
 
-	_mdiArea->addSubWindow(new Paint2DSimpleWidget);
-	_mdiArea->addSubWindow(new Paint2DWidget);
-	_mdiArea->addSubWindow(new TransformWidget);
+	_mdiArea->addSubWindow(new TextureWidget);
 	_mdiArea->addSubWindow(new CameraWidget);
 	_mdiArea->addSubWindow(new MeshWidget);
-	_mdiArea->addSubWindow(new TextureWidget);
+	_mdiArea->addSubWindow(new TransformWidget);
+	_mdiArea->addSubWindow(new Paint2DWidget);
+	_mdiArea->addSubWindow(new Paint2DSimpleWidget);	
 
 	_mdiArea->setBackground(Qt::BrushStyle::CrossPattern);
 	_mdiArea->tileSubWindows();

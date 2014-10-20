@@ -14,10 +14,6 @@ TransformWidget::TransformWidget(QWidget *parent)
 	_modelMatrix.setToIdentity();
 	_modelMatrix.scale(100);
 	_modelMatrix.rotate(45, 1, 1, 1);
-
-	// initialize projection matrix data
-	_usePerspectiveProjection = false;
-	updateProjectionMatrix();
 }
 
 TransformWidget::~TransformWidget()
@@ -28,14 +24,6 @@ TransformWidget::~TransformWidget()
 void TransformWidget::initializeGL()
 {
 	makeCurrent();
-
-	glEnable(GL_MULTISAMPLE);
-	GLint bufs;
-	GLint samples;
-	glGetIntegerv(GL_SAMPLE_BUFFERS, &bufs);
-	glGetIntegerv(GL_SAMPLES, &samples);
-
-	printf("Have %d buffers and %d samples", bufs, samples);
 }
 
 void TransformWidget::paintGL()
@@ -59,7 +47,10 @@ void TransformWidget::paintGL()
 
 	// setup projection matrix
 	glMatrixMode(GL_PROJECTION);
-	glLoadMatrixf(_projectionMatrix.data());
+	QMatrix4x4 projectionMatrix;
+	projectionMatrix.setToIdentity();
+	projectionMatrix.ortho(-width()/2.0, width()/2.0, -height()/2.0, height()/2.0, -1e3, 1e3);
+	glLoadMatrixf(projectionMatrix.data());
 
 	// draw a cube
 	static const double verts[8][4] = {
@@ -82,24 +73,21 @@ void TransformWidget::paintGL()
 		{ 1, 0, 3, 2 }
 	};
 
-	static const QColor faceColors[6] = {
-		Qt::red,
-		Qt::yellow,
-		Qt::green,
-		Qt::blue,
-		Qt::cyan,
-		Qt::magenta
+	static const double faceColors[6][4] = {
+		{1, 1, 1, 1},
+		{1, 1, 0, 0.8},
+		{1, 0, 1, 0.8},
+		{0, 1, 0, 0.8},
+		{0, 1, 1, 0.8},
+		{0, 0, 1, 0.8}
 	};
 
-	glBegin(GL_TRIANGLES);
+	glBegin(GL_QUADS);
 	for (int i = 0; i < 6; i++) {
-		glColor4f(faceColors[i].redF(), faceColors[i].greenF(), faceColors[i].blueF(), 0.8f);
+		glColor4dv(faceColors[i]);
 
 		glVertex4dv(verts[quadFaces[i][0]]);
 		glVertex4dv(verts[quadFaces[i][1]]);
-		glVertex4dv(verts[quadFaces[i][2]]);
-
-		glVertex4dv(verts[quadFaces[i][0]]);
 		glVertex4dv(verts[quadFaces[i][2]]);
 		glVertex4dv(verts[quadFaces[i][3]]);
 	}
@@ -112,7 +100,6 @@ void TransformWidget::paintGL()
 void TransformWidget::resizeGL( int w, int h )
 {
 	glViewport(0, 0, w, h);
-	updateProjectionMatrix();
 }
 
 void TransformWidget::mousePressEvent( QMouseEvent * e )
@@ -145,28 +132,4 @@ void TransformWidget::wheelEvent( QWheelEvent * e )
 {
 	_modelMatrix.scale(exp(e->delta() / 1000.0));
 	update();
-}
-
-void TransformWidget::updateProjectionMatrix()
-{
-	if(!_usePerspectiveProjection)
-	{
-		_projectionMatrix.setToIdentity();
-		_projectionMatrix.ortho(-width()/2.0, width()/2.0, -height()/2.0, height()/2.0, -1e3, 1e3);
-	}
-	else
-	{
-		_projectionMatrix.setToIdentity();
-		_projectionMatrix.perspective(20.0f, double(height()) / width(), 0.01, 1e4);
-	}
-	update();
-}
-
-void TransformWidget::keyPressEvent( QKeyEvent * e )
-{
-	if(e->key() == Qt::Key_C)
-	{
-		_usePerspectiveProjection = !_usePerspectiveProjection;
-		updateProjectionMatrix();
-	}
 }

@@ -21,12 +21,13 @@ void Paint2DSimpleWidget::paintGL()
 {
 	//////////////////////////////////////////////////////////////////////////
 	// clear background
-	//glClearColor(0.0, 0.0, 0.0, 0.0); // use black
+	///glClearColor(0.0, 0.0, 0.0, 0.0); // use black
 	glClearColor(1.0, 1.0, 1.0, 1.0); // use white
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	
 	//glScalef(2, 1, 1);
 	//glTranslatef(0, 0.5, 0);
 	glRotatef(45, 0, 0, 1);

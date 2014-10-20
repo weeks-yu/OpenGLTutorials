@@ -3,7 +3,6 @@
 
 #include <QtOpenGL>
 
-// illustrate the usage of 
 class TransformWidget : public QGLWidget
 {
 	Q_OBJECT
@@ -24,15 +23,8 @@ protected:
 	virtual void mouseReleaseEvent(QMouseEvent * e) override;
 	virtual void wheelEvent(QWheelEvent * e) override;
 
-	// key event handler
-	virtual void keyPressEvent(QKeyEvent * e) override;
-
 private:
-	void updateProjectionMatrix();
-
-private:
-	QMatrix4x4 _modelMatrix, _projectionMatrix;
-	bool _usePerspectiveProjection;
+	QMatrix4x4 _modelMatrix;
 
 private:
 	QPointF _lastMousePos;

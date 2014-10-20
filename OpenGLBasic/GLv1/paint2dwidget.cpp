@@ -17,16 +17,7 @@ Paint2DWidget::~Paint2DWidget()
 
 void Paint2DWidget::initializeGL()
 {
-	makeCurrent();
-
-	glEnable(GL_MULTISAMPLE);
-	GLint bufs;
-	GLint samples;
-	glGetIntegerv(GL_SAMPLE_BUFFERS, &bufs);
-	glGetIntegerv(GL_SAMPLES, &samples);
-
-	printf("Have %d buffers and %d samples", bufs, samples);
-	
+	makeCurrent();	
 	_centerOfDrawing = QPointF(width() / 2.0, height() / 2.0);
 	_scaleOfDrawing = 400;
 }

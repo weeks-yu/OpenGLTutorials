@@ -3,12 +3,12 @@
 
 #include "meshwidget.h"
 
-static const bool UseShaders = true;
+static const bool UseShaders = false;
 
 MeshWidget::MeshWidget(QWidget *parent)
 	: QGLWidget(parent), QGLFunctions()
 {
-	setWindowTitle(tr("4. Mesh and Projection"));
+	setWindowTitle(tr("4. Mesh, Projection and Shader"));
 	setMinimumSize(200, 200);
 	setMouseTracking(true);
 	setFocusPolicy(Qt::ClickFocus);
@@ -33,6 +33,36 @@ MeshWidget::MeshWidget(QWidget *parent)
 MeshWidget::~MeshWidget()
 {}
 
+static const char * vshaderSource = 
+	"#version 120\n"
+	"attribute lowp vec3 position;\n"
+	"attribute lowp vec3 normal;\n"
+	"uniform lowp mat4 viewMatrix;\n"
+	"uniform lowp mat4 modelMatrix;\n"
+	"uniform lowp mat4 projectionMatrix;\n"
+	"varying vec4 pixelColor;\n"
+	"varying vec3 pixelPosition;\n"
+	"void main(void)\n"
+	"{\n"
+	"    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);\n"
+	"    pixelColor = vec4(normal, 1.0);\n"
+	"	 vec4 pixelPosition4 = modelMatrix * vec4(position, 1.0);\n"
+	"    pixelPosition = pixelPosition4.xyz / pixelPosition4.w;\n"
+	"}\n";
+
+static const char * fshaderSource = 
+	"#version 120\n"
+	"varying vec4 pixelColor;\n"
+	"varying vec3 pixelPosition;\n"
+	"void main(void)\n"
+	"{\n"
+	"	 vec3 center = vec3(1.0, 0.0, 0.0);\n"
+	"    float distance = length(center - pixelPosition);\n"
+	"    gl_FragColor = pixelColor;\n"
+	/// "    gl_FragColor = pixelColor * sin(distance);\n"
+	"}\n";
+
+
 void MeshWidget::initializeGL()
 {
 	makeCurrent();
@@ -45,19 +75,6 @@ void MeshWidget::initializeGL()
 
 		// create vertex shader
 		int vshader = glCreateShader(GL_VERTEX_SHADER);
-		const char * vshaderSource = 
-			"#version 120\n"
-			"attribute lowp vec3 position;\n"
-			"attribute lowp vec3 normal;\n"
-			"uniform lowp mat4 viewMatrix;\n"
-			"uniform lowp mat4 modelMatrix;\n"
-			"uniform lowp mat4 projectionMatrix;\n"
-			"varying vec4 pixelColor;\n"
-			"void main(void)\n"
-			"{\n"
-			"    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);\n"
-			"    pixelColor = vec4(normal, 1.0);\n"
-			"}\n";
 		// set shader source and compile
 		glShaderSource(vshader, 1, &vshaderSource, 0);
 		glCompileShader(vshader);		
@@ -80,13 +97,6 @@ void MeshWidget::initializeGL()
 
 		// create fragment shader
 		int fshader = glCreateShader(GL_FRAGMENT_SHADER);
-		const char * fshaderSource = 
-			"#version 120\n"
-			"varying lowp vec4 pixelColor;\n"
-			"void main(void)\n"
-			"{\n"
-			"    gl_FragColor = pixelColor;\n"
-			"}\n";
 		// set shader source and compile
 		glShaderSource(fshader, 1, &fshaderSource, 0);
 		glCompileShader(fshader);
