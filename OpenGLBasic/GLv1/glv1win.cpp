@@ -1,3 +1,5 @@
+// author: yanghao (yangh2007@gmail.com)
+
 #include <QtOpenGL>
 
 #include "paint2dsimplewidget.h"
@@ -15,6 +17,7 @@ GLv1Win::GLv1Win(QWidget *parent)
 {
 	QGLFormat glf = QGLFormat::defaultFormat();
 	qDebug("OpenGL version: %d.%d", glf.majorVersion(), glf.minorVersion());
+	// enable anti-aliasing by over-sampling
 	glf.setSampleBuffers(true);
 	glf.setSamples(8);
 	QGLFormat::setDefaultFormat(glf);
@@ -38,9 +41,7 @@ GLv1Win::GLv1Win(QWidget *parent)
 }
 
 GLv1Win::~GLv1Win()
-{
-
-}
+{}
 
 void GLv1Win::on_actionTileWin_triggered()
 {
@@ -56,5 +57,8 @@ void GLv1Win::on_actionAbout_triggered()
 {
 	QMessageBox::about(this, 
 		tr("About this program"), 
-		tr("This is a simple program based on OpenGL 1.0 and Qt"));
+		tr(
+		"Developed using OpenGL and Qt.\n"
+		"Copyright (c) 2014, Institute of Computer Graphics and Computer-Aided Design, Tsinghua University."
+		));
 }

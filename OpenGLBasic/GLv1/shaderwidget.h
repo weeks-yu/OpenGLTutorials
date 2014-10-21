@@ -1,3 +1,5 @@
+// author: yanghao (yangh2007@gmail.com)
+
 #ifndef SHADERWIDGET_H
 #define SHADERWIDGET_H
 
@@ -31,19 +33,25 @@ private:
 	QMatrix4x4 _modelMatrix;
 
 	// mesh data
-	struct Vertex
+	struct Vertex // data of each vertex
 	{
 		QVector3D position;
 		QVector3D normal;
 	};
-	QVector<Vertex> _vertices;
-	QVector<quint32> _triangleIndices;
+	QVector<Vertex> _vertices; // data of all vertices
+	QVector<quint32> _triangleIndices; // indices of vertices for drawing triangles
 
+
+	// buffer for storing the _vertices data on GPU
 	GLuint _vertBuffer;
+	// buffer for storing the _triangleIndices data on GPU
 	GLuint _triangleIndicesBuffer;
 
+	// id of the OpenGL shader program
 	GLuint _program;
+	// location of uniform variables in the OpenGL shader program 
 	GLuint _modelMatrixLocation, _viewMatrixLocation, _projectionMatrixLocation;
+
 private:
 	QPointF _lastMousePos;
 

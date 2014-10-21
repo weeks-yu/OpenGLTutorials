@@ -1,3 +1,5 @@
+// author: yanghao (yangh2007@gmail.com)
+
 #ifndef TRANSFORMWIDGET_H
 #define TRANSFORMWIDGET_H
 

@@ -1,3 +1,5 @@
+// author: yanghao (yangh2007@gmail.com)
+
 #include "paint2dsimplewidget.h"
 
 Paint2DSimpleWidget::Paint2DSimpleWidget(QWidget *parent)
@@ -8,29 +10,25 @@ Paint2DSimpleWidget::Paint2DSimpleWidget(QWidget *parent)
 }
 
 Paint2DSimpleWidget::~Paint2DSimpleWidget()
-{
-
-}
+{}
 
 void Paint2DSimpleWidget::initializeGL()
 {
-
+	makeCurrent();
 }
 
 void Paint2DSimpleWidget::paintGL()
 {
-	//////////////////////////////////////////////////////////////////////////
 	// clear background
-	///glClearColor(0.0, 0.0, 0.0, 0.0); // use black
 	glClearColor(1.0, 1.0, 1.0, 1.0); // use white
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	// modify the model-view matrix
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	
-	//glScalef(2, 1, 1);
-	//glTranslatef(0, 0.5, 0);
-	glRotatef(45, 0, 0, 1);
+	glLoadIdentity();			// now model-view-matrix = I
+	//glScalef(2, 1, 1);		// now model-view-matrix = old-model-view-matrix * scalef(...)
+	//glTranslatef(0, 0.5, 0);	// now model-view-matrix = old-model-view-matrix * translatef(...)
+	glRotatef(45, 0, 0, 1);		// now model-view-matrix = old-model-view-matrix * rotatef(...)
 
 
 	// draw a rectangle
@@ -56,7 +54,7 @@ void Paint2DSimpleWidget::paintGL()
 	glVertex2f(0, 1);
 	glEnd();
 
-	// draw original point
+	// draw a point
 	glPointSize(10);
 	glBegin(GL_POINTS);
 	glColor3f(0, 0, 0);

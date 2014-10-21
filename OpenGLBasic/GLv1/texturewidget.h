@@ -1,3 +1,5 @@
+// author: yanghao (yangh2007@gmail.com)
+
 #ifndef TEXTUREWIDGET_H
 #define TEXTUREWIDGET_H
 
@@ -23,6 +25,7 @@ protected:
 	virtual void mouseReleaseEvent(QMouseEvent * e) override;
 	virtual void wheelEvent(QWheelEvent * e) override;
 
+	// load texture and build sphere
 	void buildModel();
 
 private:

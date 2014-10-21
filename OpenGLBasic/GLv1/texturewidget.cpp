@@ -1,3 +1,5 @@
+// author: yanghao (yangh2007@gmail.com)
+
 #include "texturewidget.h"
 
 static const int M = 128, N = 256;
@@ -27,15 +29,6 @@ TextureWidget::~TextureWidget()
 void TextureWidget::initializeGL()
 {
 	makeCurrent();
-
-	glEnable(GL_MULTISAMPLE);
-	GLint bufs;
-	GLint samples;
-	glGetIntegerv(GL_SAMPLE_BUFFERS, &bufs);
-	glGetIntegerv(GL_SAMPLES, &samples);
-
-	printf("Have %d buffers and %d samples", bufs, samples);
-
 	buildModel();
 }
 	
@@ -54,15 +47,16 @@ void TextureWidget::paintGL()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
+	// enable and bind texture
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, _textureId);
-
 
 	static GLfloat mat_diffuse[] = {100, 100, 100, 100};
 	static GLfloat mat_ambient[] = {0.f, .5f, .5f, .5f};
 	static GLfloat mat_specular[] = {100, 100, 100, 100};
 	static GLfloat mat_shininess = 100.0f;
 
+	// set material of the model
 	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
@@ -75,10 +69,11 @@ void TextureWidget::paintGL()
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(_projectionMatrix.data());
 
+	// set position of the light
 	static GLfloat lightPosition[4] = { 1, 1, 1, 0.0 };
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 
-	// setup model matrix (ignore the "view matrix" since it is identity here)
+	// setup model matrix (ignore the "view matrix" here)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(_modelMatrix.data());
 
@@ -150,10 +145,12 @@ void TextureWidget::wheelEvent( QWheelEvent * e )
 
 void TextureWidget::buildModel()
 {
+	// load texture
 	QImage im(":/GLv1Win/Resources/earthmap.jpg");
 	Q_ASSERT(!im.isNull());
 	_textureId = bindTexture(im);
 
+	// build sphere data
 	_vertexPositions.reserve(M * N);
 	_normals.reserve(M * N);
 	_texCoords.reserve(M * N);

@@ -1,9 +1,12 @@
+// author: yanghao (yangh2007@gmail.com)
+
 #ifndef GLV1WIN_H
 #define GLV1WIN_H
 
 #include <QtWidgets>
 #include "ui_glv1win.h"
 
+// the main window
 class GLv1Win : public QMainWindow
 {
 	Q_OBJECT

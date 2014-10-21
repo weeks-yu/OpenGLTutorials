@@ -1,3 +1,5 @@
+// author: yanghao (yangh2007@gmail.com)
+
 #ifndef PAINT2DWIDGET_H
 #define PAINT2DWIDGET_H
 

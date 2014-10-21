@@ -1,5 +1,6 @@
-#include <glut.h>
+// author: yanghao (yangh2007@gmail.com)
 
+#include <glut.h>
 #include "camerawidget.h"
 
 
@@ -35,7 +36,7 @@ QVector2D PerspectiveCamera::screenProjection(const QVector3D & p3) const
 	return QVector2D(x, y);
 }
 
-bool PerspectiveCamera::isVisibleOnScreen(const QVector3D & p3d) const 
+bool PerspectiveCamera::isInFront(const QVector3D & p3d) const 
 {
 	QVector4D p4(p3d, 1);
 	QVector4D position = _viewProjectionMatrix * p4;
@@ -171,29 +172,15 @@ CameraWidget::CameraWidget(QWidget *parent)
 }
 
 CameraWidget::~CameraWidget()
-{
-
-}
+{}
 
 void CameraWidget::initializeGL()
 {
 	makeCurrent();
-
-	glEnable(GL_MULTISAMPLE);
-	GLint bufs;
-	GLint samples;
-	glGetIntegerv(GL_SAMPLE_BUFFERS, &bufs);
-	glGetIntegerv(GL_SAMPLES, &samples);
-
-	printf("Have %d buffers and %d samples", bufs, samples);
 }
 
 void CameraWidget::paintGL()
-{
-	QPainter painter;
-	painter.begin(this);
-
-	painter.beginNativePainting();
+{	
 	qglClearColor(Qt::white);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -206,12 +193,14 @@ void CameraWidget::paintGL()
 	// setup projection matrix
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glLoadMatrixf(_camera.projectionMatrix().data());
+	glLoadMatrixf(_camera.projectionMatrix().data()); // now projection matrix = _camera.projectionMatrix
+
 
 	// setup view matrix for axis (model matrix of axis is identity)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glLoadMatrixf(_camera.viewMatrix().data());
+	glLoadMatrixf(_camera.viewMatrix().data()); // now model-view matrix = _camera.viewMatrix
+
 
 	// paint axis 
 	glLineWidth(10.0);
@@ -235,8 +224,7 @@ void CameraWidget::paintGL()
 
 	// setup model-view matrix for cube
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glLoadMatrixf((_camera.viewMatrix() * _modelMatrix).data());
+	glMultMatrixf(_modelMatrix.data()); // now model-view matrix = _camera.viewMatrix * _modelMatrix
 
 	// draw a teapot
 	glLineWidth(1.0);
@@ -244,13 +232,16 @@ void CameraWidget::paintGL()
 	glutWireTeapot(1.0);
 
 
-	// restore all native states
-	painter.endNativePainting();
+	glDisable(GL_MULTISAMPLE);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_ALPHA_TEST);
+	glDisable(GL_BLEND);
 }
 
 void CameraWidget::resizeGL( int w, int h )
 {
 	glViewport(0, 0, w, h);
+	// resize screen to update the projection matrix
 	_camera.resizeScreen(QSizeF(w, h));
 }
 
@@ -321,7 +312,7 @@ void CameraWidget::keyPressEvent( QKeyEvent * e )
 		_camera.turnDirection(0, -0.05);
 	}
 	
-	// adjust the near/far clip planes to make the cube visible
+	// adjust the near/far clip planes to try making the object visible
 	double d = QVector3D::dotProduct((_modelMatrix * QVector4D(0, 0, 0, 1)).toVector3DAffine() - _camera.eye(), _camera.forward());
 	double n = BoundBetween(d - 100, 1e-3, 1e3);
 	double f = BoundBetween(d + 100, 1e-3, 1e3);

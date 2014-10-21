@@ -1,3 +1,5 @@
+// author: yanghao (yangh2007@gmail.com)
+
 #include <QtGui>
 
 #include "paint2dwidget.h"
@@ -26,12 +28,13 @@ void Paint2DWidget::paintGL()
 {
 	QPainter painter;
 	painter.begin(this);
-
 	painter.beginNativePainting();
-	qglClearColor(Qt::red);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glEnable(GL_MULTISAMPLE);
+	qglClearColor(Qt::red);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glEnable(GL_MULTISAMPLE);	
+
 
 	static const int N = 10;
 	float centerX = _centerOfDrawing.x();
@@ -82,7 +85,7 @@ void Paint2DWidget::paintGL()
 	glVertex2d(centerX, centerY);
 	glEnd();
 
-	// restore all native states
+
 	painter.endNativePainting();
 }
 

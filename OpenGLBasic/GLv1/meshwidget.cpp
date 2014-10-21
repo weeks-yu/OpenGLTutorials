@@ -1,3 +1,5 @@
+// author: yanghao (yangh2007@gmail.com)
+
 #include <glut.h>
 
 #include "meshwidget.h"
@@ -5,7 +7,7 @@
 MeshWidget::MeshWidget(QWidget *parent)
 	: QGLWidget(parent)
 {
-	setWindowTitle(tr("4. Mesh, Projection and Shader"));
+	setWindowTitle(tr("4. Mesh"));
 	setMinimumSize(200, 200);
 	setMouseTracking(true);
 	setFocusPolicy(Qt::ClickFocus);
@@ -30,10 +32,6 @@ void MeshWidget::initializeGL()
 
 void MeshWidget::paintGL()
 {
-	QPainter painter;
-	painter.begin(this);
-
-	painter.beginNativePainting();
 	qglClearColor(Qt::black);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -44,21 +42,18 @@ void MeshWidget::paintGL()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glShadeModel(GL_SMOOTH);
 	
+	// set model-view matrix
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	//////////////////////////////////////////////////////////////////////////
-	// set view matrix
-	gluLookAt(0, 0, -1000, 0, 0, 0, 0, -1, 0);
-	// set model matrix
-	glMultMatrixf(_modelMatrix.data());
+	gluLookAt(0, 0, -1000, 0, 0, 0, 0, -1, 0); // now model-view matrix = lookAt(...)
+	glMultMatrixf(_modelMatrix.data()); // now model-view matrix = lookAt(...) * _modelMatrix
 
-	// set projection matrix
+	// set projection matrix 
+	// (projection matrix is often set in resizeGL(width, height) functions, 
+	//  since it only relies on the size of the window in most cases)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	//////////////////////////////////////////////////////////////////////////
-	gluPerspective(30, (double)width()/height(), 0.01, 1e5);
-	//glOrtho(-width()/2, width()/2, -height()/2, height()/2, 0.01, 1e5);
-
+	gluPerspective(30, (double)width()/height(), 0.01, 1e5); // now projection matrix = perspective(...)
 
 	// draw mesh
 	glBegin(GL_TRIANGLES);
@@ -69,9 +64,11 @@ void MeshWidget::paintGL()
 	}
 	glEnd();	
 
-	// restore all native states
-	painter.endNativePainting();
 
+	glDisable(GL_MULTISAMPLE);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_ALPHA_TEST);
+	glDisable(GL_BLEND);
 } 
 
 void MeshWidget::resizeGL( int w, int h )

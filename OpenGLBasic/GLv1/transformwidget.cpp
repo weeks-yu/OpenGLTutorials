@@ -1,5 +1,5 @@
-#include <iostream>
-#include <QtDebug>
+// author: yanghao (yangh2007@gmail.com)
+
 #include "transformwidget.h"
 
 TransformWidget::TransformWidget(QWidget *parent)
@@ -17,9 +17,7 @@ TransformWidget::TransformWidget(QWidget *parent)
 }
 
 TransformWidget::~TransformWidget()
-{
-
-}
+{}
 
 void TransformWidget::initializeGL()
 {

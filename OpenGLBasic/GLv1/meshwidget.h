@@ -1,9 +1,11 @@
+// author: yanghao (yangh2007@gmail.com)
+
 #ifndef MESHWIDGET_H
 #define MESHWIDGET_H
 
 #include <QtOpenGL>
 
-class MeshWidget : public QGLWidget, public QGLFunctions
+class MeshWidget : public QGLWidget
 {
 	Q_OBJECT
 
@@ -31,13 +33,13 @@ private:
 	QMatrix4x4 _modelMatrix;
 	
 	// mesh data
-	struct Vertex
+	struct Vertex // data of each vertex
 	{
 		QVector3D position;
 		QVector3D normal;
 	};
-	QVector<Vertex> _vertices;
-	QVector<quint32> _triangleIndices;
+	QVector<Vertex> _vertices; // data of all vertices
+	QVector<quint32> _triangleIndices; // indices of vertices for drawing triangles
 
 private:
 	QPointF _lastMousePos;
