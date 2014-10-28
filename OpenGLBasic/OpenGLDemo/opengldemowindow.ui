@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>GLv1WinClass</class>
- <widget class="QMainWindow" name="GLv1WinClass">
+ <class>OpenGLDemoWindowClass</class>
+ <widget class="QMainWindow" name="OpenGLDemoWindowClass">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,11 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>OpenGL v1 demo</string>
+   <string>OpenGL Demo</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="glv1win.qrc">
-    <normaloff>:/GLv1Win/Resources/icon.png</normaloff>:/GLv1Win/Resources/icon.png</iconset>
+   <iconset resource="opengldemowindow.qrc">
+    <normaloff>:/OpenGLDemo/Resources/icon.png</normaloff>:/OpenGLDemo/Resources/icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget"/>
   <widget class="QMenuBar" name="menuBar">
@@ -68,7 +68,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="glv1win.qrc"/>
+  <include location="opengldemowindow.qrc"/>
  </resources>
  <connections/>
 </ui>

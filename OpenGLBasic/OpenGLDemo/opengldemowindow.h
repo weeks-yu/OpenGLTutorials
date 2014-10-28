@@ -1,19 +1,19 @@
 // author: yanghao (yangh2007@gmail.com)
 
-#ifndef GLV1WIN_H
-#define GLV1WIN_H
+#ifndef OPENGLDEMOWINDOW_H
+#define OPENGLDEMOWINDOW_H
 
 #include <QtWidgets>
-#include "ui_glv1win.h"
+#include "ui_opengldemowindow.h"
 
 // the main window
-class GLv1Win : public QMainWindow
+class OpenGLDemoWindow : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	GLv1Win(QWidget *parent = 0);
-	~GLv1Win();
+	OpenGLDemoWindow(QWidget *parent = 0);
+	~OpenGLDemoWindow();
 
 public slots:
 	void on_actionTileWin_triggered();
@@ -24,7 +24,7 @@ private:
 	QMdiArea * _mdiArea;
 
 private:
-	Ui::GLv1WinClass ui;
+	Ui::OpenGLDemoWindowClass ui;
 };
 
-#endif // GLV1WIN_H
+#endif // OPENGLDEMOWINDOW_H

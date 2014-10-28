@@ -38,18 +38,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="glv1win.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_glv1win.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_glv1win.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\qrc_glv1win.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="transformwidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -113,17 +101,20 @@
     <ClCompile Include="GeneratedFiles\Release\moc_shaderwidget.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_opengldemowindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_opengldemowindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="opengldemowindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\qrc_opengldemowindow.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="glv1win.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="glv1win.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="glv1win.qrc">
-      <Filter>Resource Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="transformwidget.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
@@ -145,13 +136,27 @@
     <CustomBuild Include="shaderwidget.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="opengldemowindow.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="opengldemowindow.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="opengldemowindow.qrc">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GeneratedFiles\ui_glv1win.h">
+    <ClInclude Include="GeneratedFiles\ui_opengldemowindow.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="GLv1.rc" />
+    <Image Include="Resources\earthmap.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\icon.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

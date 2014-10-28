@@ -164,8 +164,8 @@ int CMFCOpenGLView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// user the error.
 	if (!SetPixelFormat(dc.m_hDC, pixelFormat, &pfd))
 	{
-		MessageBox(_T("Error: Unable to Set Pixel Format in CGLTemplate1View::OnCreate( )",
-			"Application Error", MB_ICONERROR));
+		MessageBox(_T("Error: Unable to Set Pixel Format in CGLTemplate1View::OnCreate( )"),
+			_T("Application Error", MB_ICONERROR));
 	}
 
 	// Creates an OpenGL rendering context so that OpenGL knows how to draw

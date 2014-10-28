@@ -146,7 +146,7 @@ void TextureWidget::wheelEvent( QWheelEvent * e )
 void TextureWidget::buildModel()
 {
 	// load texture
-	QImage im(":/GLv1Win/Resources/earthmap.jpg");
+	QImage im(":/OpenGLDemo/Resources/earthmap.jpg");
 	Q_ASSERT(!im.isNull());
 	_textureId = bindTexture(im);
 

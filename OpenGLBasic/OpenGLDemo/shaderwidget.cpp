@@ -11,7 +11,7 @@ ShaderWidget::ShaderWidget(QWidget *parent)
 	setFocusPolicy(Qt::ClickFocus);
 
 	// load mesh
-	loadMesh(tr("../data/dragon-10000.smf"));
+	loadMesh(tr("./dragon-10000.smf"));
 
 	// initialize model matrix data
 	_modelMatrix.setToIdentity();
@@ -39,8 +39,8 @@ static const char * vshaderSource =
 	"#version 120\n"					// the version of this shader
 	"attribute lowp vec3 position;\n"	// the position of each vertex
 	"attribute lowp vec3 normal;\n"		// the normal of each vertex
-	"uniform lowp mat4 viewMatrix;\n"	// the viewMatrix of this shader program
-	"uniform lowp mat4 modelMatrix;\n"	// the modelMatrix of this shader program
+	"uniform lowp mat4 viewMatrix;\n"		// the viewMatrix of this shader program
+	"uniform lowp mat4 modelMatrix;\n"		// the modelMatrix of this shader program
 	"uniform lowp mat4 projectionMatrix;\n" // the projectionMatrix of this shader program
 	"varying vec4 pixelColor;\n"	// the output color on this vertex (will be interpolated in fragment shader)
 	"varying vec3 pixelPosition;\n" // the output position on this vertex (will be interpolated in fragment shader) 
@@ -190,6 +190,12 @@ void ShaderWidget::initializeGL()
 
 void ShaderWidget::paintGL()
 {
+	QPainter painter;
+	painter.begin(this);
+
+	painter.beginNativePainting();
+
+
 	qglClearColor(Qt::black);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -246,6 +252,8 @@ void ShaderWidget::paintGL()
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_ALPHA_TEST);
 	glDisable(GL_BLEND);
+
+	painter.endNativePainting();
 }
 
 void ShaderWidget::resizeGL( int w, int h )

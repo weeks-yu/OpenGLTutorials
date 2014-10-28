@@ -10,9 +10,9 @@
 #include "texturewidget.h"
 #include "shaderwidget.h"
 
-#include "glv1win.h"
+#include "opengldemowindow.h"
 
-GLv1Win::GLv1Win(QWidget *parent)
+OpenGLDemoWindow::OpenGLDemoWindow(QWidget *parent)
 	: QMainWindow(parent)
 {
 	QGLFormat glf = QGLFormat::defaultFormat();
@@ -40,20 +40,20 @@ GLv1Win::GLv1Win(QWidget *parent)
 	_mdiArea->tileSubWindows();
 }
 
-GLv1Win::~GLv1Win()
+OpenGLDemoWindow::~OpenGLDemoWindow()
 {}
 
-void GLv1Win::on_actionTileWin_triggered()
+void OpenGLDemoWindow::on_actionTileWin_triggered()
 {
 	_mdiArea->tileSubWindows();
 }
 
-void GLv1Win::on_actionCascadeWin_triggered()
+void OpenGLDemoWindow::on_actionCascadeWin_triggered()
 {
 	_mdiArea->cascadeSubWindows();
 }
 
-void GLv1Win::on_actionAbout_triggered()
+void OpenGLDemoWindow::on_actionAbout_triggered()
 {
 	QMessageBox::about(this, 
 		tr("About this program"), 

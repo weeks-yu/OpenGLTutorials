@@ -13,7 +13,7 @@ MeshWidget::MeshWidget(QWidget *parent)
 	setFocusPolicy(Qt::ClickFocus);
 
 	// load mesh
-	loadMesh(tr("../data/dragon-10000.smf"));
+	loadMesh(tr("./dragon-10000.smf"));
 
 	// initialize model matrix data
 	_modelMatrix.setToIdentity();
@@ -32,6 +32,12 @@ void MeshWidget::initializeGL()
 
 void MeshWidget::paintGL()
 {
+	QPainter painter;
+	painter.begin(this);
+
+	painter.beginNativePainting();
+
+
 	qglClearColor(Qt::black);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -69,6 +75,8 @@ void MeshWidget::paintGL()
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_ALPHA_TEST);
 	glDisable(GL_BLEND);
+
+	painter.endNativePainting();
 } 
 
 void MeshWidget::resizeGL( int w, int h )
