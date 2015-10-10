@@ -1,4 +1,4 @@
-OpenGLBasic
+OpenGLTutorials
 ===========
 
 Simple tutorials about OpenGL
