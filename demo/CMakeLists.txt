@@ -5,13 +5,13 @@ set(CMAKE_AUTOUIC on)
 set(CMAKE_AUTORCC on)
 
 if (MSVC)
-	if (GLUT_PATH)
-	else()
-		set (GLUT_PATH "")
-	endif()
-	set (LD_PATH "${Qt_PATH};${GLUT_PATH}")
-	message (WARNING "CMake cannot configure Visual Studio to modify the environment path during program execution, "
-		"therefore you have to do this manually: add 'PATH=\$(PATH);${LD_PATH};' to [Project Property]->[Debug]->[Environment] ")
+    if (GLUT_PATH)
+    else()
+        set (GLUT_PATH "")
+    endif()
+    set (LD_PATH "${Qt_PATH};${GLUT_PATH}")
+    message (WARNING "CMake cannot configure Visual Studio to modify the environment path during program execution, "
+        "therefore you have to do this manually: add 'PATH=\$(PATH);${LD_PATH};' to [Project Property]->[Debug]->[Environment] ")
 endif ()
 
 

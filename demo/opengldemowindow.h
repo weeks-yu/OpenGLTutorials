@@ -9,22 +9,22 @@
 // the main window
 class OpenGLDemoWindow : public QMainWindow
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	OpenGLDemoWindow(QWidget *parent = 0);
-	~OpenGLDemoWindow();
+    OpenGLDemoWindow(QWidget *parent = 0);
+    ~OpenGLDemoWindow();
 
 public slots:
-	void on_actionTileWin_triggered();
-	void on_actionCascadeWin_triggered();
-	void on_actionAbout_triggered();
+    void on_actionTileWin_triggered();
+    void on_actionCascadeWin_triggered();
+    void on_actionAbout_triggered();
 
 private:
-	QMdiArea * _mdiArea;
+    QMdiArea * _mdiArea;
 
 private:
-	Ui::OpenGLDemoWindowClass ui;
+    Ui::OpenGLDemoWindowClass ui;
 };
 
 #endif // OPENGLDEMOWINDOW_H

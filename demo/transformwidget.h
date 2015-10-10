@@ -7,29 +7,29 @@
 
 class TransformWidget : public QGLWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	TransformWidget(QWidget *parent = nullptr);
-	~TransformWidget();
+    TransformWidget(QWidget *parent = nullptr);
+    ~TransformWidget();
 
 protected:
-	// opengl methods
-	virtual void initializeGL() override;
-	virtual void paintGL() override;
-	virtual void resizeGL(int w, int h) override;
+    // opengl methods
+    virtual void initializeGL() override;
+    virtual void paintGL() override;
+    virtual void resizeGL(int w, int h) override;
 
-	// mouse event handlers
-	virtual void mousePressEvent(QMouseEvent * e) override;
-	virtual void mouseMoveEvent(QMouseEvent * e) override;
-	virtual void mouseReleaseEvent(QMouseEvent * e) override;
-	virtual void wheelEvent(QWheelEvent * e) override;
-
-private:
-	QMatrix4x4 _modelMatrix;
+    // mouse event handlers
+    virtual void mousePressEvent(QMouseEvent * e) override;
+    virtual void mouseMoveEvent(QMouseEvent * e) override;
+    virtual void mouseReleaseEvent(QMouseEvent * e) override;
+    virtual void wheelEvent(QWheelEvent * e) override;
 
 private:
-	QPointF _lastMousePos;
+    QMatrix4x4 _modelMatrix;
+
+private:
+    QPointF _lastMousePos;
 };
 
 #endif // TRANSFORMWIDGET_H

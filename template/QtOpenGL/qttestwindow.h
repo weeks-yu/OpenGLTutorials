@@ -8,15 +8,15 @@
 
 class QtTestWindow : public QMainWindow
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	QtTestWindow(QWidget *parent = 0);
-	~QtTestWindow();
+    QtTestWindow(QWidget *parent = 0);
+    ~QtTestWindow();
 
 private:
-	Ui::QtTestWindowClass ui;
-	TestWidget * _w;
+    Ui::QtTestWindowClass ui;
+    TestWidget * _w;
 };
 
 #endif // QTTESTWINDOW_H

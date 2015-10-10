@@ -1,12 +1,12 @@
 #include "qttestwindow.h"
 
 QtTestWindow::QtTestWindow(QWidget *parent)
-	: QMainWindow(parent)
+    : QMainWindow(parent)
 {
-	ui.setupUi(this);
+    ui.setupUi(this);
 
-	_w = new TestWidget(this);
-	setCentralWidget(_w);
+    _w = new TestWidget(this);
+    setCentralWidget(_w);
 }
 
 QtTestWindow::~QtTestWindow()

@@ -5,16 +5,16 @@
 
 class TestWidget : public QGLWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	TestWidget(QWidget *parent);
-	~TestWidget();
+    TestWidget(QWidget *parent);
+    ~TestWidget();
 
 protected:
-	virtual void initializeGL() override;
-	virtual void paintGL() override;
-	virtual void resizeGL(int w, int h) override;
+    virtual void initializeGL() override;
+    virtual void paintGL() override;
+    virtual void resizeGL(int w, int h) override;
 
 };
 

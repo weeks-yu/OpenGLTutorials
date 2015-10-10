@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[])
 {
-	QApplication a(argc, argv);
+    QApplication a(argc, argv);
     
     QGLFormat glf = QGLFormat::defaultFormat();
     qDebug("OpenGL version: %d.%d", glf.majorVersion(), glf.minorVersion());
@@ -14,8 +14,8 @@ int main(int argc, char *argv[])
     glf.setSamples(16);
     QGLFormat::setDefaultFormat(glf);
 
-	OpenGLDemoWindow w;
-	w.resize(800, 800);
-	w.showMaximized();
-	return a.exec();
+    OpenGLDemoWindow w;
+    w.resize(800, 800);
+    w.showMaximized();
+    return a.exec();
 }
