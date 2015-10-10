@@ -1,6 +1,4 @@
-// author: yanghao (yangh2007@gmail.com)
-
-#include <glut.h>
+#include <gl/glut.h>
 #include "camerawidget.h"
 
 
@@ -184,7 +182,6 @@ void CameraWidget::paintGL()
 	qglClearColor(Qt::white);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_ALPHA_TEST);
 	glEnable(GL_BLEND);
@@ -232,7 +229,6 @@ void CameraWidget::paintGL()
 	glutWireTeapot(1.0);
 
 
-	glDisable(GL_MULTISAMPLE);
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_ALPHA_TEST);
 	glDisable(GL_BLEND);

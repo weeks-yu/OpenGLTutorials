@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="opengldemowindow.qrc">
-    <normaloff>:/OpenGLDemo/Resources/icon.png</normaloff>:/OpenGLDemo/Resources/icon.png</iconset>
+    <normaloff>:/images/icon.png</normaloff>:/images/icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget"/>
   <widget class="QMenuBar" name="menuBar">

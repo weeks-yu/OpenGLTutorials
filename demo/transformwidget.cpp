@@ -1,5 +1,4 @@
-// author: yanghao (yangh2007@gmail.com)
-
+#include <gl/glut.h>
 #include "transformwidget.h"
 
 TransformWidget::TransformWidget(QWidget *parent)
@@ -33,7 +32,6 @@ void TransformWidget::paintGL()
 	qglClearColor(Qt::black);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_ALPHA_TEST);
 	glEnable(GL_BLEND);

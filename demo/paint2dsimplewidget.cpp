@@ -1,5 +1,4 @@
-// author: yanghao (yangh2007@gmail.com)
-
+#include <gl/glut.h>
 #include "paint2dsimplewidget.h"
 
 Paint2DSimpleWidget::Paint2DSimpleWidget(QWidget *parent)

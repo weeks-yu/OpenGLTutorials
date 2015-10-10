@@ -1,6 +1,7 @@
 // author: yanghao (yangh2007@gmail.com)
 
 #include <QtGui>
+#include <gl/glut.h>
 
 #include "paint2dwidget.h"
 
@@ -32,8 +33,6 @@ void Paint2DWidget::paintGL()
 
 	qglClearColor(Qt::red);
 	glClear(GL_COLOR_BUFFER_BIT);
-
-	glEnable(GL_MULTISAMPLE);	
 
 
 	static const int N = 10;

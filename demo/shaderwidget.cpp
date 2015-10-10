@@ -1,5 +1,4 @@
-// author: yanghao (yangh2007@gmail.com)
-
+#include <gl/glut.h>
 #include "shaderwidget.h"
 
 ShaderWidget::ShaderWidget(QWidget *parent)
@@ -11,7 +10,7 @@ ShaderWidget::ShaderWidget(QWidget *parent)
 	setFocusPolicy(Qt::ClickFocus);
 
 	// load mesh
-	loadMesh(tr("./dragon-10000.smf"));
+	loadMesh(tr(OPENGL_TUTORIALS_DATA_PATH"/dragon-10000.smf"));
 
 	// initialize model matrix data
 	_modelMatrix.setToIdentity();
@@ -194,12 +193,11 @@ void ShaderWidget::paintGL()
 	painter.begin(this);
 
 	painter.beginNativePainting();
-
+    makeCurrent();
 
 	qglClearColor(Qt::black);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_ALPHA_TEST);
 	glEnable(GL_BLEND);
@@ -248,11 +246,11 @@ void ShaderWidget::paintGL()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	// restore states
-	glDisable(GL_MULTISAMPLE);
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_ALPHA_TEST);
 	glDisable(GL_BLEND);
 
+	makeCurrent();
 	painter.endNativePainting();
 }
 

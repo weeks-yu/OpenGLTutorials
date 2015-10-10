@@ -1,5 +1,4 @@
-// author: yanghao (yangh2007@gmail.com)
-
+#include <gl/glut.h>
 #include "texturewidget.h"
 
 static const int M = 128, N = 256;
@@ -41,7 +40,6 @@ void TextureWidget::paintGL()
 	qglClearColor(Qt::black);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_ALPHA_TEST);
 	glEnable(GL_BLEND);
@@ -146,7 +144,7 @@ void TextureWidget::wheelEvent( QWheelEvent * e )
 void TextureWidget::buildModel()
 {
 	// load texture
-	QImage im(":/OpenGLDemo/Resources/earthmap.jpg");
+	QImage im(":/images/earthmap.jpg");
 	Q_ASSERT(!im.isNull());
 	_textureId = bindTexture(im);
 

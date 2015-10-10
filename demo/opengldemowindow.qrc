@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>earthmap.jpg</file>
+        <file>icon.png</file>
+    </qresource>
+</RCC>

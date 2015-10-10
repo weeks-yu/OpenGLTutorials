@@ -1,7 +1,4 @@
-// author: yanghao (yangh2007@gmail.com)
-
-#include <glut.h>
-
+#include <gl/glut.h>
 #include "meshwidget.h"
 
 MeshWidget::MeshWidget(QWidget *parent)
@@ -13,7 +10,7 @@ MeshWidget::MeshWidget(QWidget *parent)
 	setFocusPolicy(Qt::ClickFocus);
 
 	// load mesh
-	loadMesh(tr("./dragon-10000.smf"));
+	loadMesh(tr(OPENGL_TUTORIALS_DATA_PATH"/dragon-10000.smf"));
 
 	// initialize model matrix data
 	_modelMatrix.setToIdentity();
@@ -36,12 +33,12 @@ void MeshWidget::paintGL()
 	painter.begin(this);
 
 	painter.beginNativePainting();
+	makeCurrent();
 
 
 	qglClearColor(Qt::black);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_ALPHA_TEST);
 	glEnable(GL_BLEND);
@@ -71,7 +68,6 @@ void MeshWidget::paintGL()
 	glEnd();	
 
 
-	glDisable(GL_MULTISAMPLE);
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_ALPHA_TEST);
 	glDisable(GL_BLEND);
