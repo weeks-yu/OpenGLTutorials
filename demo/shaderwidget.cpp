@@ -1,4 +1,3 @@
-#include <gl/glut.h>
 #include "shaderwidget.h"
 
 ShaderWidget::ShaderWidget(QWidget *parent)
@@ -212,7 +211,7 @@ void ShaderWidget::paintGL()
     // set projection matrix
     QMatrix4x4 projectionMatrix;
     projectionMatrix.setToIdentity();
-    projectionMatrix.perspective(30, (double)width()/height(), 0.01, 1e5);
+    projectionMatrix.perspective(30, (float)width()/height(), 0.01f, 1e5f);
     glUniformMatrix4fv(_projectionMatrixLocation, 1, GL_FALSE, projectionMatrix.data());
 
     // bind ArrayBuffer to _vertBuffer
