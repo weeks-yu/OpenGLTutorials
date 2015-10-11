@@ -1,5 +1,3 @@
-// author: yanghao (yangh2007@gmail.com)
-
 #ifndef TEXTUREWIDGET_H
 #define TEXTUREWIDGET_H
 

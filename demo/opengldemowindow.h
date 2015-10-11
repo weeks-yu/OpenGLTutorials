@@ -1,5 +1,3 @@
-// author: yanghao (yangh2007@gmail.com)
-
 #ifndef OPENGLDEMOWINDOW_H
 #define OPENGLDEMOWINDOW_H
 

@@ -1,5 +1,3 @@
-// author: yanghao (yangh2007@gmail.com)
-
 #ifndef SHADERWIDGET_H
 #define SHADERWIDGET_H
 

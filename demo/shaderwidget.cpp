@@ -41,8 +41,8 @@ static const char * vshaderSource =
     "uniform lowp mat4 viewMatrix;\n"       // the viewMatrix of this shader program
     "uniform lowp mat4 modelMatrix;\n"      // the modelMatrix of this shader program
     "uniform lowp mat4 projectionMatrix;\n" // the projectionMatrix of this shader program
-    "varying vec4 pixelColor;\n"    // the output color on this vertex (will be interpolated in fragment shader)
-    "varying vec3 pixelPosition;\n" // the output position on this vertex (will be interpolated in fragment shader) 
+    "varying lowp vec4 pixelColor;\n"    // the output color on this vertex (will be interpolated in fragment shader)
+    "varying lowp vec3 pixelPosition;\n" // the output position on this vertex (will be interpolated in fragment shader) 
     "void main(void)\n" // the main function
     "{\n"
     
@@ -60,16 +60,16 @@ static const char * vshaderSource =
 // the source code of fragment shader
 static const char * fshaderSource = 
     "#version 120\n" // the version of this shader
-    "varying vec4 pixelColor;\n" // the interpolated color on this pixel
-    "varying vec3 pixelPosition;\n" // the interpolated position on this pixel
+    "varying lowp vec4 pixelColor;\n" // the interpolated color on this pixel
+    "varying lowp vec3 pixelPosition;\n" // the interpolated position on this pixel
     "void main(void)\n" // the main function
     "{\n"
 
     // the center of cutting spheres
-    "    vec3 center = vec3(1.0, 0.0, 0.0);\n"
+    "    lowp vec3 center = vec3(1.0, 0.0, 0.0);\n"
 
     // compute the distance between the center and this pixel
-    "    float distance = length(center - pixelPosition);\n"
+    "    lowp float distance = length(center - pixelPosition);\n"
     
     // use sin(distance) to conditionally visualize pixels 
     "    gl_FragColor = pixelColor * sin(distance);\n"
@@ -189,13 +189,7 @@ void ShaderWidget::initializeGL()
 
 void ShaderWidget::paintGL()
 {
-    QPainter painter;
-    painter.begin(this);
-
-    painter.beginNativePainting();
-    makeCurrent();
-
-    qglClearColor(Qt::black);
+    qglClearColor(Qt::white);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glEnable(GL_DEPTH_TEST);
@@ -249,9 +243,6 @@ void ShaderWidget::paintGL()
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_ALPHA_TEST);
     glDisable(GL_BLEND);
-
-    makeCurrent();
-    painter.endNativePainting();
 }
 
 void ShaderWidget::resizeGL( int w, int h )

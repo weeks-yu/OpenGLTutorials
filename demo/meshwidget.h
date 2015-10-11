@@ -1,5 +1,3 @@
-// author: yanghao (yangh2007@gmail.com)
-
 #ifndef MESHWIDGET_H
 #define MESHWIDGET_H
 

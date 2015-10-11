@@ -1,5 +1,3 @@
-// author: yanghao (yangh2007@gmail.com)
-
 #include <QtGui>
 #include <gl/glut.h>
 
@@ -11,29 +9,23 @@ Paint2DWidget::Paint2DWidget(QWidget *parent)
     setWindowTitle(tr("2. Paint 2D Complex"));
     setMinimumSize(200, 200);
     setMouseTracking(true);
+    _scaleOfDrawing = 1;
+    _centerOfDrawing = QPointF(0.5, 0.5);
 }
 
 Paint2DWidget::~Paint2DWidget()
-{
-
-}
+{}
 
 void Paint2DWidget::initializeGL()
 {
-    makeCurrent();  
-    _centerOfDrawing = QPointF(width() / 2.0, height() / 2.0);
-    _scaleOfDrawing = 400;
+    makeCurrent(); 
 }
 
 void Paint2DWidget::paintGL()
 {
-    QPainter painter;
-    painter.begin(this);
-    painter.beginNativePainting();
-
-    qglClearColor(Qt::red);
-    glClear(GL_COLOR_BUFFER_BIT);
-
+    // clear background
+    glClearColor(1.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     static const int N = 10;
     float centerX = _centerOfDrawing.x();
@@ -83,14 +75,11 @@ void Paint2DWidget::paintGL()
     qglColor(Qt::red);
     glVertex2d(centerX, centerY);
     glEnd();
-
-
-    painter.endNativePainting();
 }
 
 void Paint2DWidget::resizeGL( int w, int h )
 {
-    glViewport(0, 0, w, h);
+    glViewport(0, 0, qMax(w, h), qMax(w, h));
 }
 
 void Paint2DWidget::mousePressEvent( QMouseEvent * e )
@@ -104,7 +93,9 @@ void Paint2DWidget::mouseMoveEvent( QMouseEvent * e )
     if(e->buttons() != Qt::NoButton)
     {
         setCursor(Qt::ClosedHandCursor);
-        _centerOfDrawing += (e->pos() - _lastMousePos);
+        auto trans = (e->pos() - _lastMousePos) / qMax(width(), height()) * 2.0;
+        _centerOfDrawing.rx() += trans.x();
+        _centerOfDrawing.ry() -= trans.y();
         _lastMousePos = e->pos();
         update();
     }
@@ -117,6 +108,6 @@ void Paint2DWidget::mouseReleaseEvent( QMouseEvent * e )
 
 void Paint2DWidget::wheelEvent( QWheelEvent * e )
 {
-    _scaleOfDrawing *= std::exp(e->delta() / 1000.0f);
+    _scaleOfDrawing *= std::exp(e->delta() / 10000.0f);
     update();
 }

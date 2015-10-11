@@ -1,5 +1,3 @@
-// author: yanghao (yangh2007@gmail.com)
-
 #ifndef CAMERAWIDGET_H
 #define CAMERAWIDGET_H
 

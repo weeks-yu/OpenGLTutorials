@@ -1,5 +1,3 @@
-// author: yanghao (yangh2007@gmail.com)
-
 #include <QtOpenGL>
 
 #include "paint2dsimplewidget.h"
@@ -34,9 +32,9 @@ OpenGLDemoWindow::OpenGLDemoWindow(QWidget *parent)
     _mdiArea->addSubWindow(new MeshWidget);
     _mdiArea->addSubWindow(new TransformWidget);
     _mdiArea->addSubWindow(new Paint2DWidget);
-    _mdiArea->addSubWindow(new Paint2DSimpleWidget);    
+    //_mdiArea->addSubWindow(new Paint2DSimpleWidget);    
 
-    _mdiArea->setBackground(Qt::BrushStyle::CrossPattern);
+    _mdiArea->setBackground(Qt::darkGray);
     _mdiArea->tileSubWindows();
 }
 

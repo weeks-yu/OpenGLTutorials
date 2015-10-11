@@ -25,11 +25,7 @@ void TransformWidget::initializeGL()
 
 void TransformWidget::paintGL()
 {
-    QPainter painter;
-    painter.begin(this);
-
-    painter.beginNativePainting();
-    qglClearColor(Qt::black);
+    qglClearColor(Qt::gray);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glEnable(GL_DEPTH_TEST);
@@ -88,9 +84,6 @@ void TransformWidget::paintGL()
         glVertex4dv(verts[quadFaces[i][3]]);
     }
     glEnd();    
-    
-    // restore all native states
-    painter.endNativePainting();
 }
 
 void TransformWidget::resizeGL( int w, int h )

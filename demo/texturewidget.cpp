@@ -33,10 +33,6 @@ void TextureWidget::initializeGL()
     
 void TextureWidget::paintGL()
 {
-    QPainter painter;
-    painter.begin(this);
-
-    painter.beginNativePainting();
     qglClearColor(Qt::black);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -97,9 +93,6 @@ void TextureWidget::paintGL()
         }
     }
     glEnd();    
-
-    // restore all native states
-    painter.endNativePainting();
 }
 
 void TextureWidget::resizeGL( int w, int h )

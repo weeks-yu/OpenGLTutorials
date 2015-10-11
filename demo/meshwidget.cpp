@@ -29,14 +29,9 @@ void MeshWidget::initializeGL()
 
 void MeshWidget::paintGL()
 {
-    QPainter painter;
-    painter.begin(this);
-
-    painter.beginNativePainting();
     makeCurrent();
 
-
-    qglClearColor(Qt::black);
+    qglClearColor(Qt::white);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glEnable(GL_DEPTH_TEST);
@@ -71,8 +66,6 @@ void MeshWidget::paintGL()
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_ALPHA_TEST);
     glDisable(GL_BLEND);
-
-    painter.endNativePainting();
 } 
 
 void MeshWidget::resizeGL( int w, int h )
