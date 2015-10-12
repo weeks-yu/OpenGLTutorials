@@ -7,14 +7,15 @@ TerrainWidget::TerrainWidget(QWidget *parent)
     setMouseTracking(true);
     setFocusPolicy(Qt::ClickFocus);
 
+    // initialize height ratio
+    _heightRatio = 0.1f;
     prepare();
 
     // initialize model matrix data
     _modelMatrix.setToIdentity();
     _modelMatrix.rotate(45, 1, 1, 1);
 
-    // initialize height ratio
-    _heightRatio = 0.1f;
+  
 
     // initialize buffer ids to 0
     _gridBuffer = 0;
@@ -52,14 +53,13 @@ static const char * vshaderSource =
     "{\n"
     "    lowp vec4 normalHeight = texture2D(normalHeightMap, position);\n"
     "    lowp float height = normalHeight.a * heightRatio;\n"
+    // get pixelNormal
+    "    pixelNormal = normalize(normalHeight.rgb);\n"
 
     // gl_Position is the final coordinate of this vertex on screen
     "    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position * 2.0 - 1.0, height, 1.0);\n"
 
-    // get pixelNormal
-    "    lowp vec4 normal4 = vec4(normalHeight.rgb, 1.0);\n"
-    "    normal4 = viewMatrix * modelMatrix * normal4;\n"
-    "    pixelNormal = normalize(normal4.xyz / normal4.w);\n"
+  
 
     // get pixelPosition
     "    lowp vec4 position4 = viewMatrix * modelMatrix * vec4(position * 2.0 - 1.0, height, 1.0);\n"
@@ -79,12 +79,12 @@ static const char * fshaderSource =
     "{\n"
 
     // the center of light
-    "    lowp vec3 lightCenter = vec3(5.0, 5.0, 5.0);\n"
+    "    lowp vec3 lightCenter = vec3(5.0, 5.0, -50.0);\n"
 
     // compute the distance between the center and this pixel
-    //"    lowp vec3 reflected = normalize(reflect(normalize(pixelPosition - lightCenter), normalize(pixelNormal)));\n"
+    "    lowp vec3 reflected = normalize(reflect(normalize(pixelPosition - lightCenter), normalize(pixelNormal)));\n"
 
-    "    gl_FragColor = vec4(vec3(0.5) * pixelHeight, 1.0);\n"
+    "    gl_FragColor = vec4(pixelNormal * pixelHeight, 1.0);\n"
 
     "}\n";
 
@@ -173,13 +173,9 @@ void TerrainWidget::initializeGL() {
     // 1. we create a new texture object whose data comes from the _normalHeightMap, 
     //    and the name of the texture object is returned as '_texture';
     // 2. we bind the object '_texture' onto the GL_TEXTURE_2D part within the GL_TEXTURE0 group
+    // related gl calls include:
+    // glCreateTextures, glBindTexture, glTexImage2D
     _texture = bindTexture(_normalHeightMap, GL_TEXTURE_2D, GL_RGBA);
-
-    // set texture parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 
 
@@ -328,7 +324,7 @@ void TerrainWidget::wheelEvent(QWheelEvent * e) {
 
 void TerrainWidget::prepare() {
     // create grid data
-    static const int resolution = 1024;
+    static const int resolution = 256;
     _grids.resize(resolution * resolution);
     for (int i = 0; i < resolution; i++) {
         for (int j = 0; j < resolution; j++) {
@@ -355,15 +351,21 @@ void TerrainWidget::prepare() {
     for (int i = 0; i < im.width(); i++) {
         for (int j = 0; j < im.height(); j++) {
             float height = qGray(im.pixel(i, j)) / 255.0f * _heightRatio;
-            float adjHs[2] = { 
+            float adjHs[4] = { 
                 i > 0 ? (qAlpha(_normalHeightMap.pixel(i - 1, j)) / 255.0f * _heightRatio) : height,
-                j > 0 ? (qAlpha(_normalHeightMap.pixel(i, j - 1)) / 255.0f * _heightRatio) : height
+                j > 0 ? (qAlpha(_normalHeightMap.pixel(i, j - 1)) / 255.0f * _heightRatio) : height,
+                i < im.width() - 1 ? (qAlpha(_normalHeightMap.pixel(i + 1, j)) / 255.0f * _heightRatio) : height,
+                j < im.height() - 1 ? (qAlpha(_normalHeightMap.pixel(i, j + 1)) / 255.0f * _heightRatio) : height
             };
-            QVector3D grads[] = {
-                QVector3D(1.0f / resolution, 0.0f, adjHs[0] - height),
-                QVector3D(0.0f, 1.0f / resolution, adjHs[1] - height)
-            };
-            QVector3D normal = QVector3D::crossProduct(grads[0], grads[1]).normalized();
+            float dxdy[][2] = { {-1.0f, 0.0f}, {0.0f, -1.0f}, {1.0f, 0.0f}, {0.0f, 1.0f} };
+            QVector3D normal;
+            for (int k = 0; k < 4; k++) {
+                QVector3D v1(dxdy[k][0], dxdy[k][1], (adjHs[k] - height) * resolution);
+                QVector3D v2(dxdy[(k + 1) % 4][0], dxdy[(k + 1) % 4][1], 
+                    (adjHs[(k + 1) % 4] - height) * resolution);
+                normal += QVector3D::crossProduct(v1, v2).normalized();
+            }
+            normal.normalize();
             QRgb normalHeight = qRgba(normal.x() * 255, normal.y() * 255, normal.z() * 255, qGray(im.pixel(i, j)));
             _normalHeightMap.setPixel(i, j, normalHeight);
         }
