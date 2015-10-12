@@ -1,10 +1,9 @@
-#include <gl/glut.h>
 #include "transformwidget.h"
 
 TransformWidget::TransformWidget(QWidget *parent)
     : QGLWidget(parent)
 {
-    setWindowTitle(tr("3. Model Transform"));
+    setWindowTitle(tr("2. Model Transform"));
     setMinimumSize(200, 200);
     setMouseTracking(true);
     setFocusPolicy(Qt::ClickFocus);

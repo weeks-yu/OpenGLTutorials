@@ -3,7 +3,7 @@
 ShaderWidget::ShaderWidget(QWidget *parent)
     : QGLWidget(parent), QGLFunctions()
 {
-    setWindowTitle(tr("7. Shader"));
+    setWindowTitle(tr("5. Shader - Mesh"));
     setMinimumSize(200, 200);
     setMouseTracking(true);
     setFocusPolicy(Qt::ClickFocus);

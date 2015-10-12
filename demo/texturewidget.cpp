@@ -1,4 +1,3 @@
-#include <gl/glut.h>
 #include "texturewidget.h"
 
 static const int M = 128, N = 256;
@@ -6,7 +5,7 @@ static const int M = 128, N = 256;
 TextureWidget::TextureWidget(QWidget *parent)
     : QGLWidget(parent)
 {
-    setWindowTitle(tr("6. Texture and Light"));
+    setWindowTitle(tr("4. Texture"));
     setMinimumSize(200, 200);
     setMouseTracking(true);
 
@@ -21,9 +20,7 @@ TextureWidget::TextureWidget(QWidget *parent)
 }
 
 TextureWidget::~TextureWidget()
-{
-
-}
+{}
 
 void TextureWidget::initializeGL()
 {

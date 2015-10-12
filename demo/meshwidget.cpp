@@ -1,10 +1,9 @@
-#include <gl/glut.h>
 #include "meshwidget.h"
 
 MeshWidget::MeshWidget(QWidget *parent)
     : QGLWidget(parent)
 {
-    setWindowTitle(tr("4. Mesh"));
+    setWindowTitle(tr("3. Mesh"));
     setMinimumSize(200, 200);
     setMouseTracking(true);
     setFocusPolicy(Qt::ClickFocus);
@@ -43,7 +42,9 @@ void MeshWidget::paintGL()
     // set model-view matrix
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(0, 0, -1000, 0, 0, 0, 0, -1, 0); // now model-view matrix = lookAt(...)
+    QMatrix4x4 viewMatrix;
+    viewMatrix.lookAt(QVector3D(0, 0, -1000), QVector3D(0, 0, 0), QVector3D(0, -1, 0));
+    glMultMatrixf(viewMatrix.data());
     glMultMatrixf(_modelMatrix.data()); // now model-view matrix = lookAt(...) * _modelMatrix
 
     // set projection matrix 
@@ -51,7 +52,9 @@ void MeshWidget::paintGL()
     //  since it only relies on the size of the window in most cases)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(30, (double)width()/height(), 0.01, 1e5); // now projection matrix = perspective(...)
+    QMatrix4x4 projectionMatrix;
+    projectionMatrix.perspective(30.0f, (float)width() / height(), 0.01f, 1e5f);
+    glMultMatrixf(projectionMatrix.data());
 
     // draw mesh
     glBegin(GL_TRIANGLES);

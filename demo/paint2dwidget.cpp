@@ -1,12 +1,11 @@
 #include <QtGui>
-#include <gl/glut.h>
 
 #include "paint2dwidget.h"
 
 Paint2DWidget::Paint2DWidget(QWidget *parent)
     : QGLWidget(parent)
 {
-    setWindowTitle(tr("2. Paint 2D Complex"));
+    setWindowTitle(tr("1. Paint 2D Shapes"));
     setMinimumSize(200, 200);
     setMouseTracking(true);
     _scaleOfDrawing = 1;

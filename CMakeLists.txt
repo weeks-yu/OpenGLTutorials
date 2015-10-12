@@ -54,16 +54,6 @@ foreach (i ${Qt_LIBS})
 endforeach ()
 
 
-#### locate GLUT ####
-if (WIN32 AND (EX_PLATFORM EQUAL 32))   
-    set (GLUT_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extern/include)
-    set (GLUT_LIBRARIES ${CMAKE_CURRENT_SOURCE_DIR}/extern/lib/win32/glut32.lib)
-    set (GLUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/extern/lib/win32)
-else()
-    find_package(GLUT)
-endif()
-
-
 ### define data path ####
 set (OPENGL_TUTORIALS_DATA_PATH ${CMAKE_CURRENT_SOURCE_DIR}/data)
 if (MSVC)

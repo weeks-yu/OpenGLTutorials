@@ -1,8 +1,9 @@
 #include "terrainwidget.h"
 
 TerrainWidget::TerrainWidget(QWidget *parent)
-    : QGLWidget(parent), QGLFunctions() {
-    setWindowTitle(tr("8. Terrain by Shader"));
+    : QGLWidget(parent), QGLFunctions() 
+{
+    setWindowTitle(tr("6. Shader - Height Map"));
     setMinimumSize(200, 200);
     setMouseTracking(true);
     setFocusPolicy(Qt::ClickFocus);
@@ -13,8 +14,8 @@ TerrainWidget::TerrainWidget(QWidget *parent)
 
     // initialize model matrix data
     _modelMatrix.setToIdentity();
-    _modelMatrix.rotate(45, 1, 1, 1);
-
+    _modelMatrix.scale(4);
+    _modelMatrix.rotate(180, 1, 0, 0);
   
 
     // initialize buffer ids to 0
@@ -57,9 +58,7 @@ static const char * vshaderSource =
     "    pixelNormal = normalize(normalHeight.rgb);\n"
 
     // gl_Position is the final coordinate of this vertex on screen
-    "    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position * 2.0 - 1.0, height, 1.0);\n"
-
-  
+    "    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position * 2.0 - 1.0, height, 1.0);\n"  
 
     // get pixelPosition
     "    lowp vec4 position4 = viewMatrix * modelMatrix * vec4(position * 2.0 - 1.0, height, 1.0);\n"
@@ -78,18 +77,13 @@ static const char * fshaderSource =
     "void main(void)\n" // the main function
     "{\n"
 
-    // the center of light
-    "    lowp vec3 lightCenter = vec3(5.0, 5.0, -50.0);\n"
-
-    // compute the distance between the center and this pixel
-    "    lowp vec3 reflected = normalize(reflect(normalize(pixelPosition - lightCenter), normalize(pixelNormal)));\n"
-
     "    gl_FragColor = vec4(pixelNormal * pixelHeight, 1.0);\n"
 
     "}\n";
 
 
-void TerrainWidget::initializeGL() {
+void TerrainWidget::initializeGL() 
+{
     makeCurrent();
     initializeGLFunctions(context());
 
@@ -174,7 +168,7 @@ void TerrainWidget::initializeGL() {
     //    and the name of the texture object is returned as '_texture';
     // 2. we bind the object '_texture' onto the GL_TEXTURE_2D part within the GL_TEXTURE0 group
     // related gl calls include:
-    // glCreateTextures, glBindTexture, glTexImage2D
+    //  glCreateTextures, glBindTexture, glTexImage2D
     _texture = bindTexture(_normalHeightMap, GL_TEXTURE_2D, GL_RGBA);
 
 
@@ -217,7 +211,8 @@ void TerrainWidget::initializeGL() {
 
 }
 
-void TerrainWidget::paintGL() {
+void TerrainWidget::paintGL() 
+{
     qglClearColor(Qt::white);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -291,7 +286,8 @@ void TerrainWidget::paintGL() {
     glDisable(GL_BLEND);
 }
 
-void TerrainWidget::resizeGL(int w, int h) {
+void TerrainWidget::resizeGL(int w, int h) 
+{
     glViewport(0, 0, w, h);
 }
 
@@ -300,7 +296,8 @@ void TerrainWidget::mousePressEvent(QMouseEvent * e) {
     setCursor(Qt::OpenHandCursor);
 }
 
-void TerrainWidget::mouseMoveEvent(QMouseEvent * e) {
+void TerrainWidget::mouseMoveEvent(QMouseEvent * e) 
+{
     if (e->buttons() != Qt::NoButton) {
         setCursor(Qt::ClosedHandCursor);
         auto t = (e->pos() - _lastMousePos);
@@ -313,16 +310,19 @@ void TerrainWidget::mouseMoveEvent(QMouseEvent * e) {
     }
 }
 
-void TerrainWidget::mouseReleaseEvent(QMouseEvent * e) {
+void TerrainWidget::mouseReleaseEvent(QMouseEvent * e) 
+{
     setCursor(Qt::ArrowCursor);
 }
 
-void TerrainWidget::wheelEvent(QWheelEvent * e) {
+void TerrainWidget::wheelEvent(QWheelEvent * e) 
+{
     _modelMatrix.scale(exp(e->delta() / 1000.0));
     update();
 }
 
-void TerrainWidget::prepare() {
+void TerrainWidget::prepare() 
+{
     // create grid data
     static const int resolution = 256;
     _grids.resize(resolution * resolution);
@@ -346,7 +346,7 @@ void TerrainWidget::prepare() {
 
     // load the image
     QImage im(tr(":/images/australia.jpg"));
-    // extract the normal and height map
+    // compute the normal and height map
     _normalHeightMap = QImage(im.width(), im.height(), QImage::Format_ARGB32);
     for (int i = 0; i < im.width(); i++) {
         for (int j = 0; j < im.height(); j++) {

@@ -1,9 +1,7 @@
 #include <QtOpenGL>
 
-#include "paint2dsimplewidget.h"
 #include "paint2dwidget.h"
 #include "transformwidget.h"
-#include "camerawidget.h"
 #include "meshwidget.h"
 #include "texturewidget.h"
 #include "shaderwidget.h"
@@ -27,14 +25,12 @@ OpenGLDemoWindow::OpenGLDemoWindow(QWidget *parent)
     _mdiArea = new QMdiArea(this);
     setCentralWidget(_mdiArea);
 
-    _mdiArea->addSubWindow(new ShaderWidget);
+    _mdiArea->addSubWindow(new TerrainWidget);
+    _mdiArea->addSubWindow(new ShaderWidget); 
     _mdiArea->addSubWindow(new TextureWidget);
-    //_mdiArea->addSubWindow(new CameraWidget);
     _mdiArea->addSubWindow(new MeshWidget);
     _mdiArea->addSubWindow(new TransformWidget);
     _mdiArea->addSubWindow(new Paint2DWidget);
-    //_mdiArea->addSubWindow(new Paint2DSimpleWidget);    
-    _mdiArea->addSubWindow(new TerrainWidget);
 
     _mdiArea->setBackground(Qt::darkGray);
     _mdiArea->tileSubWindows();
@@ -59,6 +55,6 @@ void OpenGLDemoWindow::on_actionAbout_triggered()
         tr("About this program"), 
         tr(
         "Developed using OpenGL and Qt.\n"
-        "Copyright (c) 2014, Institute of Computer Graphics and Computer-Aided Design, Tsinghua University."
+        "Copyright (c) 2015, Institute of Computer Graphics and Computer-Aided Design, Tsinghua University."
         ));
 }
