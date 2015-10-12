@@ -114,8 +114,6 @@ private:
 
 class CameraWidget : public QGLWidget
 {
-    Q_OBJECT
-
 public:
     CameraWidget(QWidget *parent = nullptr);
     ~CameraWidget();

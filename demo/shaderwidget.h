@@ -5,8 +5,6 @@
 
 class ShaderWidget : public QGLWidget, public QGLFunctions
 {
-    Q_OBJECT
-
 public:
     ShaderWidget(QWidget *parent = nullptr);
     ~ShaderWidget();

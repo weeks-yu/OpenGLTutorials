@@ -5,8 +5,6 @@
 
 class TransformWidget : public QGLWidget
 {
-    Q_OBJECT
-
 public:
     TransformWidget(QWidget *parent = nullptr);
     ~TransformWidget();

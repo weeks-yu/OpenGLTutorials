@@ -5,8 +5,6 @@
 
 class TextureWidget : public QGLWidget
 {
-    Q_OBJECT
-
 public:
     TextureWidget(QWidget *parent = nullptr);
     ~TextureWidget();

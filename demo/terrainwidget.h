@@ -3,7 +3,8 @@
 
 #include <QtOpenGL>
 
-class TerrainWidget : public QGLWidget, public QGLFunctions {
+class TerrainWidget : public QGLWidget, public QGLFunctions 
+{
 
 public:
     TerrainWidget(QWidget *parent = nullptr);

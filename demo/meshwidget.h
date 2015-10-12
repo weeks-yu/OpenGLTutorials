@@ -5,8 +5,6 @@
 
 class MeshWidget : public QGLWidget
 {
-    Q_OBJECT
-
 public:
     MeshWidget(QWidget *parent = nullptr);
     ~MeshWidget();

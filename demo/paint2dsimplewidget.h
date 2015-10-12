@@ -5,8 +5,6 @@
 
 class Paint2DSimpleWidget : public QGLWidget
 {
-    Q_OBJECT
-
 public:
     Paint2DSimpleWidget(QWidget *parent = nullptr);
     ~Paint2DSimpleWidget();

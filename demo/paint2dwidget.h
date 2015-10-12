@@ -5,8 +5,6 @@
 
 class Paint2DWidget : public QGLWidget
 {
-    Q_OBJECT
-
 public:
     Paint2DWidget(QWidget *parent = nullptr);
     ~Paint2DWidget();
