@@ -1,14 +1,15 @@
-#ifndef TERRAINWIDGET_H
-#define TERRAINWIDGET_H
+#ifndef FRAGMENTSHADERWIDGET_H
+#define FRAGMENTSHADERWIDGET_H
 
 #include <QtOpenGL>
 
-class TerrainWidget : public QGLWidget, public QGLFunctions 
+class FragmentShaderWidget : public QGLWidget, public QGLFunctions
 {
+	Q_OBJECT
 
 public:
-    TerrainWidget(QWidget *parent = nullptr);
-    ~TerrainWidget();
+    FragmentShaderWidget(const QByteArray & fragmentShaderSource, QWidget *parent = nullptr);
+    ~FragmentShaderWidget();
 
 protected:
     // opengl methods
@@ -23,37 +24,32 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent * e) override;
     virtual void wheelEvent(QWheelEvent * e) override;
 
-    // prepare data
-    void prepare();
-
-
 private:
-    QMatrix4x4 _modelMatrix;
-    float _heightRatio;
-
-    QVector<QVector2D> _grids; // grid data
+    QVector<QVector2D> _vertices; // data of vertices
     QVector<quint32> _triangleIndices; // indices of vertices for drawing triangles
 
+	 // the locations of the uniform variables in shader
+	GLuint _resolutionLocation;
+	GLuint _timeLocation;
+	GLuint _mouseLocation;
 
-    // buffer for storing the _grids data on GPU
-    GLuint _gridBuffer;
+
+    // buffer for storing the _vertices data on GPU
+    GLuint _vertBuffer;
     // buffer for storing the _triangleIndices data on GPU
     GLuint _triangleIndicesBuffer;
 
     // id of the OpenGL shader program
     GLuint _program;
-    // location of uniform variables in the OpenGL shader program 
-    GLuint _modelMatrixLocation, _viewMatrixLocation, _projectionMatrixLocation, 
-        _normalHeightMapLocation, _heightRatioLocation;
-
-    // texture of the height map
-    GLuint _texture;
-    // the normal height map
-    QImage _normalHeightMap;
 
 private:
     QPointF _lastMousePos;
+	QPointF _currentMousePos;
 
+	QTimer * _timer;
+	uint32_t _timeValue;
+
+	QByteArray _fragmentShaderSource;
 };
 
-#endif // SHADERWIDGET_H
+#endif // FRAGMENTSHADERWIDGET_H
