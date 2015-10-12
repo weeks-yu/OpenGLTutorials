@@ -1,13 +1,12 @@
-#ifndef TEXTUREWIDGET_H
-#define TEXTUREWIDGET_H
+#pragma once
 
 #include <QtOpenGL>
 
-class TextureWidget : public QGLWidget
+class EarthWidget : public QGLWidget
 {
 public:
-    TextureWidget(QWidget *parent = nullptr);
-    ~TextureWidget();
+    EarthWidget(QWidget *parent = nullptr);
+    ~EarthWidget();
 
 protected:
     // opengl methods
@@ -35,5 +34,3 @@ private:
 private:
     QPointF _lastMousePos;  
 };
-
-#endif // TEXTUREWIDGET_H

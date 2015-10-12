@@ -1,9 +1,9 @@
-#include "shaderwidget.h"
+#include "dragon2widget.h"
 
-ShaderWidget::ShaderWidget(QWidget *parent)
+Dragon2Widget::Dragon2Widget(QWidget *parent)
     : QGLWidget(parent), QGLFunctions()
 {
-    setWindowTitle(tr("5. Shader - Mesh"));
+    setWindowTitle(tr("5. Dragon 2"));
     setMinimumSize(200, 200);
     setMouseTracking(true);
     setFocusPolicy(Qt::ClickFocus);
@@ -29,7 +29,7 @@ ShaderWidget::ShaderWidget(QWidget *parent)
     _projectionMatrixLocation = -1;
 }
 
-ShaderWidget::~ShaderWidget()
+Dragon2Widget::~Dragon2Widget()
 {}
 
 // the source code of vertex shader
@@ -76,7 +76,7 @@ static const char * fshaderSource =
     "}\n";
 
 
-void ShaderWidget::initializeGL()
+void Dragon2Widget::initializeGL()
 {
     makeCurrent();
     initializeGLFunctions(context());
@@ -186,7 +186,7 @@ void ShaderWidget::initializeGL()
 
 }
 
-void ShaderWidget::paintGL()
+void Dragon2Widget::paintGL()
 {
     qglClearColor(Qt::white);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -244,18 +244,18 @@ void ShaderWidget::paintGL()
     glDisable(GL_BLEND);
 }
 
-void ShaderWidget::resizeGL( int w, int h )
+void Dragon2Widget::resizeGL( int w, int h )
 {
     glViewport(0, 0, w, h);
 }
 
-void ShaderWidget::mousePressEvent( QMouseEvent * e )
+void Dragon2Widget::mousePressEvent( QMouseEvent * e )
 {
     _lastMousePos = e->pos();
     setCursor(Qt::OpenHandCursor);
 }
 
-void ShaderWidget::mouseMoveEvent( QMouseEvent * e )
+void Dragon2Widget::mouseMoveEvent( QMouseEvent * e )
 {
     if(e->buttons() != Qt::NoButton)
     {
@@ -270,18 +270,18 @@ void ShaderWidget::mouseMoveEvent( QMouseEvent * e )
     }
 }
 
-void ShaderWidget::mouseReleaseEvent( QMouseEvent * e )
+void Dragon2Widget::mouseReleaseEvent( QMouseEvent * e )
 {
     setCursor(Qt::ArrowCursor);
 }
 
-void ShaderWidget::wheelEvent( QWheelEvent * e )
+void Dragon2Widget::wheelEvent( QWheelEvent * e )
 {
     _modelMatrix.scale(exp(e->delta() / 1000.0));
     update();
 }
 
-void ShaderWidget::loadMesh( const QString & f )
+void Dragon2Widget::loadMesh( const QString & f )
 {
     _vertices.clear();
     _triangleIndices.clear();

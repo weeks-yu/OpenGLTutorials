@@ -1,9 +1,9 @@
-#include "transformwidget.h"
+#include "cubewidget.h"
 
-TransformWidget::TransformWidget(QWidget *parent)
+CubeWidget::CubeWidget(QWidget *parent)
     : QGLWidget(parent)
 {
-    setWindowTitle(tr("2. Model Transform"));
+    setWindowTitle(tr("2. Cube"));
     setMinimumSize(200, 200);
     setMouseTracking(true);
     setFocusPolicy(Qt::ClickFocus);
@@ -14,17 +14,17 @@ TransformWidget::TransformWidget(QWidget *parent)
     _modelMatrix.rotate(45, 1, 1, 1);
 }
 
-TransformWidget::~TransformWidget()
+CubeWidget::~CubeWidget()
 {}
 
-void TransformWidget::initializeGL()
+void CubeWidget::initializeGL()
 {
     makeCurrent();
 }
 
-void TransformWidget::paintGL()
+void CubeWidget::paintGL()
 {
-    qglClearColor(Qt::gray);
+    qglClearColor(Qt::white);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glEnable(GL_DEPTH_TEST);
@@ -55,6 +55,21 @@ void TransformWidget::paintGL()
         { -1, 1, 1, 1 }
     };
 
+    //   4 --- 7
+    //  /|    /|
+    // 5 --- 6 |
+    // | 0 --| 3
+    // |/    |/
+    // 1 --- 2
+
+    static const int lines[][2] = {
+        {0, 1}, {1, 2}, {2, 3}, {3, 0},
+        {5, 6}, {6, 7}, {7, 4}, {4, 5},
+        {1, 5}, {2, 6}, {3, 7}, {0, 4},
+        {5, 7}, {7, 2}, {5, 2}, {1, 4}, {4, 3}, {1, 3}
+    };
+
+
     static const int quadFaces[6][4] = {
         { 0, 1, 5, 4 },
         { 4, 5, 6, 7 },
@@ -65,7 +80,7 @@ void TransformWidget::paintGL()
     };
 
     static const double faceColors[6][4] = {
-        {1, 1, 1, 1},
+        {0, 0, 0, 0.8},
         {1, 1, 0, 0.8},
         {1, 0, 1, 0.8},
         {0, 1, 0, 0.8},
@@ -73,30 +88,43 @@ void TransformWidget::paintGL()
         {0, 0, 1, 0.8}
     };
 
-    glBegin(GL_QUADS);
+    glBegin(GL_TRIANGLES);
     for (int i = 0; i < 6; i++) {
         glColor4dv(faceColors[i]);
-
         glVertex4dv(verts[quadFaces[i][0]]);
         glVertex4dv(verts[quadFaces[i][1]]);
         glVertex4dv(verts[quadFaces[i][2]]);
+        glColor4d(faceColors[i][0]/2, faceColors[i][1]/2, faceColors[i][2]/2, 0.8);
+        glVertex4dv(verts[quadFaces[i][0]]);
+        glVertex4dv(verts[quadFaces[i][2]]);
         glVertex4dv(verts[quadFaces[i][3]]);
     }
-    glEnd();    
+    glEnd(); 
+
+    //glLineWidth(1.0f);
+    //glBegin(GL_LINES);
+    //for (int i = 0; i < 18; i++) {
+    //    glColor4d(0.5, 0.5, 0.5, 0.5);
+    //    glVertex4dv(verts[lineIndices[i][0]]);
+    //    glVertex4dv(verts[lineIndices[i][1]]);
+    //}
+    //glEnd();
+
+
 }
 
-void TransformWidget::resizeGL( int w, int h )
+void CubeWidget::resizeGL( int w, int h )
 {
     glViewport(0, 0, w, h);
 }
 
-void TransformWidget::mousePressEvent( QMouseEvent * e )
+void CubeWidget::mousePressEvent( QMouseEvent * e )
 {
     _lastMousePos = e->pos();
     setCursor(Qt::OpenHandCursor);
 }
 
-void TransformWidget::mouseMoveEvent( QMouseEvent * e )
+void CubeWidget::mouseMoveEvent( QMouseEvent * e )
 {
     if(e->buttons() != Qt::NoButton)
     {
@@ -111,12 +139,12 @@ void TransformWidget::mouseMoveEvent( QMouseEvent * e )
     }
 }
 
-void TransformWidget::mouseReleaseEvent( QMouseEvent * e )
+void CubeWidget::mouseReleaseEvent( QMouseEvent * e )
 {
     setCursor(Qt::ArrowCursor);
 }
 
-void TransformWidget::wheelEvent( QWheelEvent * e )
+void CubeWidget::wheelEvent( QWheelEvent * e )
 {
     _modelMatrix.scale(exp(e->delta() / 1000.0));
     update();

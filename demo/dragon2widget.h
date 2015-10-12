@@ -1,13 +1,12 @@
-#ifndef SHADERWIDGET_H
-#define SHADERWIDGET_H
+#pragma once
 
 #include <QtOpenGL>
 
-class ShaderWidget : public QGLWidget, public QGLFunctions
+class Dragon2Widget : public QGLWidget, public QGLFunctions
 {
 public:
-    ShaderWidget(QWidget *parent = nullptr);
-    ~ShaderWidget();
+    Dragon2Widget(QWidget *parent = nullptr);
+    ~Dragon2Widget();
 
 protected:
     // opengl methods
@@ -52,5 +51,3 @@ private:
     QPointF _lastMousePos;
 
 };
-
-#endif // SHADERWIDGET_H

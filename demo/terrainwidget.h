@@ -1,5 +1,4 @@
-#ifndef TERRAINWIDGET_H
-#define TERRAINWIDGET_H
+#pragma once
 
 #include <QtOpenGL>
 
@@ -55,5 +54,3 @@ private:
     QPointF _lastMousePos;
 
 };
-
-#endif // SHADERWIDGET_H

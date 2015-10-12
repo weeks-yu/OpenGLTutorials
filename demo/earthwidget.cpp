@@ -1,11 +1,11 @@
-#include "texturewidget.h"
+#include "earthwidget.h"
 
 static const int M = 128, N = 256;
 
-TextureWidget::TextureWidget(QWidget *parent)
+EarthWidget::EarthWidget(QWidget *parent)
     : QGLWidget(parent)
 {
-    setWindowTitle(tr("4. Texture"));
+    setWindowTitle(tr("4. Earth"));
     setMinimumSize(200, 200);
     setMouseTracking(true);
 
@@ -19,16 +19,16 @@ TextureWidget::TextureWidget(QWidget *parent)
     _projectionMatrix.ortho(-width()/2.0, width()/2.0, -height()/2.0, height()/2.0, -1e4, 1e4);
 }
 
-TextureWidget::~TextureWidget()
+EarthWidget::~EarthWidget()
 {}
 
-void TextureWidget::initializeGL()
+void EarthWidget::initializeGL()
 {
     makeCurrent();
     buildModel();
 }
     
-void TextureWidget::paintGL()
+void EarthWidget::paintGL()
 {
     qglClearColor(Qt::black);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -92,20 +92,20 @@ void TextureWidget::paintGL()
     glEnd();    
 }
 
-void TextureWidget::resizeGL( int w, int h )
+void EarthWidget::resizeGL( int w, int h )
 {
     glViewport(0, 0, w, h);
     _projectionMatrix.setToIdentity();
     _projectionMatrix.ortho(-width()/2.0, width()/2.0, -height()/2.0, height()/2.0, -1e4, 1e4);
 }
 
-void TextureWidget::mousePressEvent( QMouseEvent * e )
+void EarthWidget::mousePressEvent( QMouseEvent * e )
 {
     _lastMousePos = e->pos();
     setCursor(Qt::OpenHandCursor);
 }
 
-void TextureWidget::mouseMoveEvent( QMouseEvent * e )
+void EarthWidget::mouseMoveEvent( QMouseEvent * e )
 {
     if(e->buttons() != Qt::NoButton)
     {
@@ -120,18 +120,18 @@ void TextureWidget::mouseMoveEvent( QMouseEvent * e )
     }
 }
 
-void TextureWidget::mouseReleaseEvent( QMouseEvent * e )
+void EarthWidget::mouseReleaseEvent( QMouseEvent * e )
 {
     setCursor(Qt::ArrowCursor);
 }
 
-void TextureWidget::wheelEvent( QWheelEvent * e )
+void EarthWidget::wheelEvent( QWheelEvent * e )
 {
     _modelMatrix.scale(exp(e->delta() / 1000.0));
     update();
 }
 
-void TextureWidget::buildModel()
+void EarthWidget::buildModel()
 {
     // load texture
     QImage im(":/images/earthmap.jpg");

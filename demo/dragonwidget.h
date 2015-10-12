@@ -1,13 +1,12 @@
-#ifndef MESHWIDGET_H
-#define MESHWIDGET_H
+#pragma once
 
 #include <QtOpenGL>
 
-class MeshWidget : public QGLWidget
+class DragonWidget : public QGLWidget
 {
 public:
-    MeshWidget(QWidget *parent = nullptr);
-    ~MeshWidget();
+    DragonWidget(QWidget *parent = nullptr);
+    ~DragonWidget();
 
 protected:
     // opengl methods
@@ -40,5 +39,3 @@ private:
 private:
     QPointF _lastMousePos;
 };
-
-#endif // MESHWIDGET_H

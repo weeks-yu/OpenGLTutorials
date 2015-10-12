@@ -1,9 +1,9 @@
-#include "meshwidget.h"
+#include "dragonwidget.h"
 
-MeshWidget::MeshWidget(QWidget *parent)
+DragonWidget::DragonWidget(QWidget *parent)
     : QGLWidget(parent)
 {
-    setWindowTitle(tr("3. Mesh"));
+    setWindowTitle(tr("3. Dragon"));
     setMinimumSize(200, 200);
     setMouseTracking(true);
     setFocusPolicy(Qt::ClickFocus);
@@ -17,16 +17,16 @@ MeshWidget::MeshWidget(QWidget *parent)
     _modelMatrix.rotate(45, 1, 1, 1);
 }
 
-MeshWidget::~MeshWidget()
+DragonWidget::~DragonWidget()
 {}
 
 
-void MeshWidget::initializeGL()
+void DragonWidget::initializeGL()
 {
     makeCurrent();
 }
 
-void MeshWidget::paintGL()
+void DragonWidget::paintGL()
 {
     makeCurrent();
 
@@ -71,18 +71,18 @@ void MeshWidget::paintGL()
     glDisable(GL_BLEND);
 } 
 
-void MeshWidget::resizeGL( int w, int h )
+void DragonWidget::resizeGL( int w, int h )
 {
     glViewport(0, 0, w, h);
 }
 
-void MeshWidget::mousePressEvent( QMouseEvent * e )
+void DragonWidget::mousePressEvent( QMouseEvent * e )
 {
     _lastMousePos = e->pos();
     setCursor(Qt::OpenHandCursor);
 }
 
-void MeshWidget::mouseMoveEvent( QMouseEvent * e )
+void DragonWidget::mouseMoveEvent( QMouseEvent * e )
 {
     if(e->buttons() != Qt::NoButton)
     {
@@ -97,18 +97,18 @@ void MeshWidget::mouseMoveEvent( QMouseEvent * e )
     }
 }
 
-void MeshWidget::mouseReleaseEvent( QMouseEvent * e )
+void DragonWidget::mouseReleaseEvent( QMouseEvent * e )
 {
     setCursor(Qt::ArrowCursor);
 }
 
-void MeshWidget::wheelEvent( QWheelEvent * e )
+void DragonWidget::wheelEvent( QWheelEvent * e )
 {
     _modelMatrix.scale(exp(e->delta() / 1000.0));
     update();
 }
 
-void MeshWidget::loadMesh( const QString & f )
+void DragonWidget::loadMesh( const QString & f )
 {
     _vertices.clear();
     _triangleIndices.clear();

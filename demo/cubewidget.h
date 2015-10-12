@@ -1,13 +1,12 @@
-#ifndef TRANSFORMWIDGET_H
-#define TRANSFORMWIDGET_H
+#pragma once
 
 #include <QtOpenGL>
 
-class TransformWidget : public QGLWidget
+class CubeWidget : public QGLWidget
 {
 public:
-    TransformWidget(QWidget *parent = nullptr);
-    ~TransformWidget();
+    CubeWidget(QWidget *parent = nullptr);
+    ~CubeWidget();
 
 protected:
     // opengl methods
@@ -27,5 +26,3 @@ private:
 private:
     QPointF _lastMousePos;
 };
-
-#endif // TRANSFORMWIDGET_H

@@ -3,7 +3,7 @@
 TerrainWidget::TerrainWidget(QWidget *parent)
     : QGLWidget(parent), QGLFunctions() 
 {
-    setWindowTitle(tr("6. Shader - Height Map"));
+    setWindowTitle(tr("6. Terrain"));
     setMinimumSize(200, 200);
     setMouseTracking(true);
     setFocusPolicy(Qt::ClickFocus);

@@ -1,10 +1,10 @@
 #include <QtOpenGL>
 
 #include "paint2dwidget.h"
-#include "transformwidget.h"
-#include "meshwidget.h"
-#include "texturewidget.h"
-#include "shaderwidget.h"
+#include "cubewidget.h"
+#include "dragonwidget.h"
+#include "dragon2widget.h"
+#include "earthwidget.h"
 #include "terrainwidget.h"
 
 #include "opengldemowindow.h"
@@ -26,10 +26,10 @@ OpenGLDemoWindow::OpenGLDemoWindow(QWidget *parent)
     setCentralWidget(_mdiArea);
 
     _mdiArea->addSubWindow(new TerrainWidget);
-    _mdiArea->addSubWindow(new ShaderWidget); 
-    _mdiArea->addSubWindow(new TextureWidget);
-    _mdiArea->addSubWindow(new MeshWidget);
-    _mdiArea->addSubWindow(new TransformWidget);
+    _mdiArea->addSubWindow(new Dragon2Widget); 
+    _mdiArea->addSubWindow(new EarthWidget);
+    _mdiArea->addSubWindow(new DragonWidget);
+    _mdiArea->addSubWindow(new CubeWidget);
     _mdiArea->addSubWindow(new Paint2DWidget);
 
     _mdiArea->setBackground(Qt::darkGray);

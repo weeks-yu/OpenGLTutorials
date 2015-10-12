@@ -5,7 +5,7 @@
 Paint2DWidget::Paint2DWidget(QWidget *parent)
     : QGLWidget(parent)
 {
-    setWindowTitle(tr("1. Paint 2D Shapes"));
+    setWindowTitle(tr("1. 2D"));
     setMinimumSize(200, 200);
     setMouseTracking(true);
     _scaleOfDrawing = 1;
